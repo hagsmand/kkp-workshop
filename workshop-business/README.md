@@ -23,19 +23,30 @@ workshop-business/
 
 Skills คือชุดคำแนะนำพิเศษที่สอน Bob วิธีสร้างไฟล์รูปแบบต่างๆ ได้อย่างถูกต้อง
 
-### ขั้นตอนติดตั้ง Skills
+### Skills ที่ต้องใช้ใน Workshop นี้
 
-1. เปิด IBM Bob ใน workspace นี้
-2. กดปุ่ม **Marketplace** (ไอคอน 🛒 มุมบน)
-3. ค้นหาและติดตั้ง Skills ต่อไปนี้:
+| Skill | ใช้ทำอะไร |
+|-------|-----------|
+| **pptx** | สร้างและแก้ไขไฟล์ PowerPoint (.pptx) |
+| **xlsx** | อ่านและสร้างไฟล์ Excel (.xlsx) |
+| **office-insights** | อ่าน/แก้ไข .docx, .xlsx, .pptx ผ่าน OpenXML |
 
-| Skill | ใช้ทำอะไร | วิธีค้นหา |
-|-------|-----------|-----------|
-| **pptx** | สร้างไฟล์ PowerPoint | ค้นหา "pptx" |
-| **xlsx** | อ่านและสร้างไฟล์ Excel | ค้นหา "xlsx" |
-| **office-insights** | อ่าน/แก้ไข .docx, .xlsx, .pptx | ค้นหา "office" |
+---
 
-> **หมายเหตุ:** Skills เหล่านี้ถูกโหลดอัตโนมัติเมื่อ Bob ตรวจพบว่าคุณต้องการไฟล์นั้น แต่การติดตั้งล่วงหน้าจะทำให้ผลลัพธ์ดีกว่า
+### Skills ที่รวมอยู่ใน Workshop นี้แล้ว ✅
+
+Skills ถูกติดตั้งไว้ใน project นี้แล้วที่ `.bob/skills/` ไม่ต้องติดตั้งเพิ่ม
+
+```
+.bob/
+└── skills/
+    ├── pptx/
+    │   └── SKILL.md        ← สร้างไฟล์ PowerPoint ด้วย pptxgenjs
+    └── office-insights/
+        └── SKILL.md        ← อ่านและแก้ไข .docx / .xlsx / .pptx
+```
+
+> **หมายเหตุ:** Skills เหล่านี้ถูกโหลดอัตโนมัติเมื่อ Bob ตรวจพบว่าคุณต้องการไฟล์นั้น เช่น พอคุณพูดว่า "สร้าง PowerPoint" Bob จะใช้ pptx skill โดยอัตโนมัติ
 
 ---
 
@@ -120,6 +131,19 @@ Skills คือชุดคำแนะนำพิเศษที่สอน 
 
 ---
 
+### 💬 เริ่ม Chat Session ใหม่ก่อน STEP 4
+
+> Skills จะโหลดได้เต็มประสิทธิภาพเมื่อเริ่ม session ใหม่เท่านั้น
+
+1. กดปุ่ม **New Chat** (ไอคอน ✏️ หรือ `+` มุมบนซ้าย) เพื่อเปิด session ใหม่
+2. เรียก skill `office-insights` ด้วย slash command:
+   ```
+   /office-insights
+   ```
+3. Bob จะยืนยันว่าโหลด skill สำเร็จ — จากนั้นทำ STEP 4 ได้เลย
+
+---
+
 ### STEP 4 — สร้าง Word Document Report (15 นาที)
 
 **Prompt 4.1 — สร้าง DOCX:**
@@ -138,6 +162,19 @@ workshop-business/output/kkp_credit_report.docx
 ```
 
 > **หมายเหตุ:** Bob จะใช้ office-insights skill เพื่อสร้างไฟล์ .docx ที่ถูกต้องตามมาตรฐาน OpenXML
+
+---
+
+### 💬 เริ่ม Chat Session ใหม่ก่อน STEP 5
+
+> Skills จะโหลดได้เต็มประสิทธิภาพเมื่อเริ่ม session ใหม่เท่านั้น
+
+1. กดปุ่ม **New Chat** เพื่อเปิด session ใหม่
+2. เรียก skill `pptx` ด้วย slash command:
+   ```
+   /pptx
+   ```
+3. Bob จะยืนยันว่าโหลด skill สำเร็จ — จากนั้นทำ STEP 5 ได้เลย
 
 ---
 
