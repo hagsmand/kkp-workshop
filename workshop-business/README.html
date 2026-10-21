@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KKP Workshop: IBM Bob for Business Users</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #1f2328;
+    background: #f7f8fa;
+  }
+  a { color: #3b82d4; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ── Header ── */
+  .site-header {
+    background: #003087;
+    color: #fff;
+    padding: 40px 24px 32px;
+    text-align: center;
+  }
+  .site-header .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+  }
+  .site-header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+  .site-header .subtitle { font-size: 15px; opacity: 0.85; margin-bottom: 20px; }
+  .meta-pills { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .meta-pill {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 14px;
+    padding: 4px 14px;
+    font-size: 13px;
+  }
+
+  /* ── Layout ── */
+  .container { max-width: 780px; margin: 0 auto; padding: 32px 20px 60px; }
+
+  /* ── Section ── */
+  section { margin-bottom: 40px; }
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #003087;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e5e7eb;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1f2328;
+    margin: 22px 0 10px;
+  }
+  p { margin-bottom: 12px; color: #1f2328; }
+
+  /* ── Story box ── */
+  .story-box {
+    background: #eef4ff;
+    border-left: 4px solid #3b82d4;
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  .story-box ol { padding-left: 20px; }
+  .story-box li { margin-bottom: 6px; }
+
+  /* ── File structure ── */
+  .file-tree {
+    background: #1e2432;
+    color: #cdd9e5;
+    border-radius: 8px;
+    padding: 18px 20px;
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    overflow-x: auto;
+  }
+  .file-tree pre {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    white-space: pre;
+    background: none;
+    padding: 0;
+  }
+  .file-tree .dir  { color: #79c0ff; }
+  .file-tree .file { color: #cdd9e5; }
+  .file-tree .note { color: #8b949e; }
+
+  /* ── Skills table ── */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th {
+    background: #003087;
+    color: #fff;
+    padding: 9px 14px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td { padding: 9px 14px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #f7f8fa; }
+  .skill-name {
+    display: inline-block;
+    background: #003087;
+    color: #fff;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-family: monospace;
+    font-size: 13px;
+  }
+
+  /* ── Step cards ── */
+  .step-list { display: flex; flex-direction: column; gap: 20px; }
+  .step-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    background: #f0f4ff;
+    border-bottom: 1px solid #dde4f0;
+  }
+  .step-num {
+    width: 32px; height: 32px;
+    background: #003087;
+    color: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+    flex-shrink: 0;
+  }
+  .step-title { font-weight: 700; font-size: 15px; color: #003087; }
+  .step-time { margin-left: auto; font-size: 12px; color: #57606a; background: #e5e7eb; border-radius: 10px; padding: 2px 10px; }
+  .step-body { padding: 16px 20px; }
+  .step-body p { margin-bottom: 10px; font-size: 14px; }
+
+  /* ── Prompt block ── */
+  .prompt-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #57606a;
+    text-transform: uppercase;
+    margin: 14px 0 6px;
+  }
+  .prompt-box {
+    background: #0d1117;
+    color: #e6edf3;
+    border-radius: 8px;
+    padding: 12px 14px 12px 18px;
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    position: relative;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .prompt-box .prompt-text {
+    flex: 1;
+    min-width: 0;
+  }
+  /* ── Copy button ── */
+  .copy-btn {
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    color: #8b949e;
+    border-radius: 5px;
+    padding: 3px 9px;
+    font-size: 11px;
+    font-family: -apple-system, "Segoe UI", sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+    margin-top: 1px;
+  }
+  .copy-btn:hover { background: rgba(255,255,255,0.16); color: #e6edf3; }
+  .copy-btn.copied { background: #1a4731; border-color: #2ea043; color: #56d364; }
+
+  /* ── Output badge ── */
+  .output-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 13px;
+    color: #166534;
+    margin: 8px 4px 0 0;
+  }
+
+  /* ── Tip callout ── */
+  .tip {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #78350f;
+    margin-top: 12px;
+  }
+  .tip strong { color: #92400e; }
+
+  /* ── Tips table ── */
+  .tips-table td:first-child { font-size: 13px; color: #57606a; width: 40%; }
+  .tips-table td:last-child { font-size: 13px; }
+
+  /* ── Checklist ── */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check-box {
+    width: 18px; height: 18px;
+    border: 2px solid #003087;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ── Skills footer ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .skill-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .skill-card .name { font-family: monospace; font-size: 14px; font-weight: 700; color: #003087; margin-bottom: 4px; }
+  .skill-card .desc { font-size: 13px; color: #57606a; }
+
+  /* ── Page footer ── */
+  .page-footer {
+    margin-top: 48px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+    font-size: 12px;
+    color: #57606a;
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="badge">🏦 BUSINESS TRACK</div>
+  <h1>KKP Workshop: IBM Bob for Business Users</h1>
+  <p class="subtitle">วิเคราะห์ข้อมูลสินเชื่อด้วย AI — ผลลัพธ์ 3 รูปแบบ</p>
+  <div class="meta-pills">
+    <span class="meta-pill">⏱ 60 นาที</span>
+    <span class="meta-pill">👤 ไม่ต้องเขียนโค้ด</span>
+    <span class="meta-pill">📊 CSV → HTML · DOCX · PPTX</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ── Structure ── -->
+  <section>
+    <h2>📦 โครงสร้าง Workshop</h2>
+    <div class="file-tree"><pre><span class="dir">workshop-business/</span>
+├── <span class="dir">data/</span>
+│   ├── <span class="file">kkp_loan_data.csv</span>      <span class="note">← ข้อมูลสินเชื่อจำลอง (30 รายการ)</span>
+│   └── <span class="file">kkp_employee_data.csv</span>  <span class="note">← ข้อมูลพนักงาน KKP จำลอง (20 คน)</span>
+└── <span class="file">README.html</span>            <span class="note">← คู่มือนี้</span></pre></div>
+  </section>
+
+  <!-- ── Skills ── -->
+  <section>
+    <h2>🛠️ การเตรียม Skills ก่อนเริ่ม</h2>
+    <p>Skills คือชุดคำแนะนำพิเศษที่สอน Bob วิธีสร้างไฟล์รูปแบบต่างๆ ได้อย่างถูกต้อง ติดตั้งก่อนเริ่ม Workshop:</p>
+    <ol style="padding-left:20px;margin-bottom:16px;">
+      <li>เปิด IBM Bob ใน workspace นี้</li>
+      <li>กดปุ่ม <strong>Marketplace</strong> (ไอคอน 🛒 มุมบน)</li>
+      <li>ค้นหาและติดตั้ง Skills ตามตารางด้านล่าง</li>
+    </ol>
+    <table>
+      <thead><tr><th>Skill</th><th>ใช้ทำอะไร</th><th>วิธีค้นหา</th></tr></thead>
+      <tbody>
+        <tr><td><span class="skill-name">pptx</span></td><td>สร้างไฟล์ PowerPoint</td><td>ค้นหา "pptx"</td></tr>
+        <tr><td><span class="skill-name">xlsx</span></td><td>อ่านและสร้างไฟล์ Excel</td><td>ค้นหา "xlsx"</td></tr>
+        <tr><td><span class="skill-name">office-insights</span></td><td>อ่าน/แก้ไข .docx, .xlsx, .pptx</td><td>ค้นหา "office"</td></tr>
+      </tbody>
+    </table>
+    <div class="tip"><strong>หมายเหตุ:</strong> Skills เหล่านี้ถูกโหลดอัตโนมัติเมื่อ Bob ตรวจพบว่าคุณต้องการไฟล์นั้น แต่การติดตั้งล่วงหน้าจะทำให้ผลลัพธ์ดีกว่า</div>
+  </section>
+
+  <!-- ── Story ── -->
+  <section>
+    <h2>📋 เนื้อเรื่อง Workshop</h2>
+    <div class="story-box">
+      <p>คุณเป็นทีม <strong>Credit Risk Analytics</strong> ของ KKP<br>คุณได้รับ CSV ข้อมูลสินเชื่อลูกค้า 30 ราย และต้องการ:</p>
+      <ol>
+        <li>เข้าใจภาพรวมพอร์ตสินเชื่อ (สัดส่วนประเภทสินเชื่อ, การกระจายตามจังหวัด)</li>
+        <li>ระบุความเสี่ยง (ลูกค้าที่มีหนี้ค้างชำระ, Credit Score ต่ำ)</li>
+        <li>นำเสนอผลให้ผู้บริหาร ใน 3 รูปแบบ</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ── Steps ── -->
+  <section>
+    <h2>🚀 Workshop Prompts — ทำตามลำดับ</h2>
+    <div class="step-list">
+
+      <!-- Step 1 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-num">1</div>
+          <div class="step-title">อ่านและทำความเข้าใจข้อมูล</div>
+          <span class="step-time">5 นาที</span>
+        </div>
+        <div class="step-body">
+          <p><strong>เปิดไฟล์:</strong> <code>workshop-business/data/kkp_loan_data.csv</code></p>
+          <div class="prompt-label">Prompt 1.1 — สำรวจข้อมูลเบื้องต้น</div>
+          <div class="prompt-box"><span class="prompt-text">อ่านไฟล์ workshop-business/data/kkp_loan_data.csv
+แล้วสรุปให้ฉันเข้าใจว่าข้อมูลนี้มีอะไรบ้าง มีกี่แถว กี่คอลัมน์
+และบอกสิ่งที่น่าสนใจเบื้องต้นที่เห็นในข้อมูล</span><button class="copy-btn" onclick="copyPrompt(this)">Copy</button></div>
+          <div class="tip"><strong>สิ่งที่ควรได้รับ:</strong> Bob จะอ่านไฟล์และสรุปโครงสร้างข้อมูล พร้อมสิ่งที่สังเกตเห็น</div>
+
+          <div class="prompt-label">Prompt 1.2 — วิเคราะห์ภาพรวมพอร์ต</div>
+          <div class="prompt-box"><span class="prompt-text">จากข้อมูลสินเชื่อ kkp_loan_data.csv วิเคราะห์ให้ฉัน:
+1. สัดส่วนของประเภทสินเชื่อ (loan_type) แต่ละประเภท
+2. จำนวนและมูลค่าสินเชื่อรวมแยกตามจังหวัด (province) Top 5
+3. อัตราการปฏิเสธสินเชื่อ (rejection rate)
+4. มูลค่าสินเชื่อเฉลี่ยแยกตามอาชีพ (occupation)</span><button class="copy-btn" onclick="copyPrompt(this)">Copy</button></div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-num">2</div>
+          <div class="step-title">วิเคราะห์ความเสี่ยง</div>
+          <span class="step-time">10 นาที</span>
+        </div>
+        <div class="step-body">
+          <div class="prompt-label">Prompt 2.1 — ระบุลูกค้าความเสี่ยงสูง</div>
+          <div class="prompt-box"><span class="prompt-text">จากข้อมูลสินเชื่อ kkp_loan_data.csv ช่วยระบุลูกค้าที่มีความเสี่ยงสูง โดย:
+1. แสดงรายชื่อลูกค้าที่มี days_overdue > 0 พร้อมรายละเอียด
+2. วิเคราะห์ pattern ของลูกค้าที่มี default_flag = 1
+3. บอกว่า credit_score เฉลี่ยของลูกค้าที่ผิดนัดชำระ เทียบกับที่ไม่ผิดนัดชำระเป็นอย่างไร
+4. สรุปปัจจัยเสี่ยงที่พบ</span><button class="copy-btn" onclick="copyPrompt(this)">Copy</button></div>
+
+          <div class="prompt-label">Prompt 2.2 — เปรียบเทียบกลุ่ม</div>
+          <div class="prompt-box"><span class="prompt-text">วิเคราะห์ความสัมพันธ์ระหว่าง credit_score กับ loan_amount_thb
+และ interest_rate_pct กับ credit_score
+แล้วสรุปข้อค้นพบที่สำคัญ 3 ข้อสำหรับทีม Risk Management</span><button class="copy-btn" onclick="copyPrompt(this)">Copy</button></div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-num">3</div>
+          <div class="step-title">สร้าง Interactive HTML Dashboard</div>
+          <span class="step-time">15 นาที</span>
+        </div>
+        <div class="step-body">
+          <div class="prompt-label">Prompt 3.1 — สร้าง HTML Report</div>
+          <div class="prompt-box"><span class="prompt-text">จากการวิเคราะห์ข้อมูลสินเชื่อ kkp_loan_data.csv ทั้งหมด
+สร้างไฟล์ HTML แบบ interactive dashboard ที่มี:
+1. หัวเรื่อง "KKP Credit Portfolio Dashboard — May 2024"
+2. Summary cards: จำนวนสินเชื่อทั้งหมด, มูลค่ารวม, อัตรา Default, Credit Score เฉลี่ย
+3. Pie chart แสดงสัดส่วนประเภทสินเชื่อ (ใช้ Chart.js จาก CDN)
+4. Bar chart แสดง Top 5 จังหวัดตามมูลค่าสินเชื่อ
+5. ตารางแสดงลูกค้าความเสี่ยงสูง (days_overdue > 0) พร้อม highlight สีแดง
+6. ดีไซน์สไตล์ธนาคาร สีน้ำเงิน-ขาว ดูเป็นมืออาชีพ
+
+บันทึกเป็นไฟล์ workshop-business/output/kkp_credit_dashboard.html</span><button class="copy-btn" onclick="copyPrompt(this)">Copy</button></div>
+          <div>
+            <span class="output-badge">✅ Output: kkp_credit_dashboard.html</span>
+          </div>
+          <div class="tip"><strong>Tip:</strong> Bob จะสร้างไฟล์ HTML พร้อม Chart.js ให้อัตโนมัติ หลังจากนั้นเปิดไฟล์ใน browser เพื่อดูผลลัพธ์</div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-num">4</div>
+          <div class="step-title">สร้าง Word Document Report</div>
+          <span class="step-time">15 นาที</span>
+        </div>
+        <div class="step-body">
+          <div class="prompt-label">Prompt 4.1 — สร้าง DOCX</div>
+          <div class="prompt-box"><span class="prompt-text">สร้างรายงาน Word (.docx) สรุปผลการวิเคราะห์สินเชื่อ โดยบันทึกเป็น
+workshop-business/output/kkp_credit_report.docx
+
+รายงานควรมีหัวข้อดังนี้:
+1. บทสรุปผู้บริหาร (Executive Summary) — ย่อหน้า 3-4 บรรทัด
+2. ภาพรวมพอร์ตสินเชื่อ — ตารางแสดงสถิติสำคัญ
+3. การวิเคราะห์ความเสี่ยง — รายชื่อลูกค้าความเสี่ยงสูงในตาราง
+4. ข้อเสนอแนะ — bullet points อย่างน้อย 3 ข้อ
+5. ข้อมูลทั่วไป: จัดทำโดย KKP Credit Risk Team, วันที่ 1 มิถุนายน 2567
+
+ใช้ font Calibri, หัวข้อสีน้ำเงินเข้ม, มีเส้นแบ่งหัวข้อ</span><button class="copy-btn" onclick="copyPrompt(this)">Copy</button></div>
+          <div>
+            <span class="output-badge">✅ Output: kkp_credit_report.docx</span>
+          </div>
+          <div class="tip"><strong>หมายเหตุ:</strong> Bob จะใช้ office-insights skill เพื่อสร้างไฟล์ .docx ที่ถูกต้องตามมาตรฐาน OpenXML</div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-num">5</div>
+          <div class="step-title">สร้าง PowerPoint Presentation</div>
+          <span class="step-time">15 นาที</span>
+        </div>
+        <div class="step-body">
+          <div class="prompt-label">Prompt 5.1 — สร้าง PPTX</div>
+          <div class="prompt-box"><span class="prompt-text">สร้าง PowerPoint presentation สำหรับนำเสนอผลวิเคราะห์สินเชื่อต่อผู้บริหาร KKP
+บันทึกเป็น workshop-business/output/kkp_credit_presentation.pptx
+
+โครงสร้าง Slides:
+- Slide 1: Title — "KKP Credit Portfolio Analysis Q2 2024" + subtitle "Credit Risk Management Team"
+- Slide 2: Agenda (4 หัวข้อ)
+- Slide 3: Portfolio Overview — ตารางสถิติสำคัญ
+- Slide 4: Loan Type Distribution — ข้อมูล Pie chart (ใส่เป็นตารางข้อมูล)
+- Slide 5: Risk Analysis — ตารางลูกค้าความเสี่ยงสูง
+- Slide 6: Key Findings — bullet points 3-4 ข้อ
+- Slide 7: Recommendations — bullet points 3 ข้อ
+- Slide 8: Thank You + ข้อมูลติดต่อ
+
+สีธีม: น้ำเงินเข้ม (#003087) และขาว, font: Calibri</span><button class="copy-btn" onclick="copyPrompt(this)">Copy</button></div>
+          <div>
+            <span class="output-badge">✅ Output: kkp_credit_presentation.pptx</span>
+          </div>
+          <div class="tip"><strong>Tip:</strong> Bob จะใช้ pptx skill เพื่อสร้างไฟล์ที่เปิดได้ใน PowerPoint ได้ทันที</div>
+        </div>
+      </div>
+
+      <!-- Step 6 Bonus -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-num" style="background:#7c5cd8;">6</div>
+          <div class="step-title" style="color:#7c5cd8;">Bonus — วิเคราะห์ข้อมูลพนักงาน</div>
+          <span class="step-time">10 นาที</span>
+        </div>
+        <div class="step-body">
+          <div class="prompt-label">Prompt 6.1 — HR Analytics</div>
+          <div class="prompt-box"><span class="prompt-text">อ่านไฟล์ workshop-business/data/kkp_employee_data.csv
+แล้ววิเคราะห์ให้ฉัน:
+1. แผนกไหนมี ai_tool_usage_score สูงที่สุด?
+2. มีความสัมพันธ์ระหว่าง training_hours_2023 กับ performance_score_2023 หรือไม่?
+3. พนักงานที่ eligible สำหรับ promotion มีคุณสมบัติร่วมกันอะไรบ้าง?
+4. สรุปข้อเสนอแนะด้าน HR 2 ข้อ</span><button class="copy-btn" onclick="copyPrompt(this)">Copy</button></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Tips ── -->
+  <section>
+    <h2>💡 Tips &amp; Best Practices</h2>
+    <table class="tips-table">
+      <thead><tr><th>สถานการณ์</th><th>วิธีแก้</th></tr></thead>
+      <tbody>
+        <tr><td>Bob ไม่อ่านไฟล์ CSV</td><td>บอก Bob ว่า "อ่านไฟล์ที่ path <code>workshop-business/data/kkp_loan_data.csv</code>" ให้ชัดเจน</td></tr>
+        <tr><td>ไฟล์ PPTX เปิดไม่ได้</td><td>ลอง Prompt ว่า "ตรวจสอบและแก้ไขไฟล์ .pptx ให้ถูกต้องตาม OpenXML standard"</td></tr>
+        <tr><td>ต้องการแก้ไขสีใน HTML</td><td>บอก Bob ว่า "เปลี่ยนสี header เป็น #003087 และ background เป็น #f5f5f5"</td></tr>
+        <tr><td>Chart ไม่แสดงข้อมูล</td><td>บอก Bob ว่า "ใส่ข้อมูลตัวเลขจริงจาก CSV ลงใน Chart.js dataset"</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ── Checklist ── -->
+  <section>
+    <h2>🎯 สิ่งที่ควรได้หลัง Workshop นี้</h2>
+    <ul class="checklist">
+      <li><span class="check-box"></span><span>ไฟล์ <code>kkp_credit_dashboard.html</code> — เปิดใน browser ได้ มี interactive charts</span></li>
+      <li><span class="check-box"></span><span>ไฟล์ <code>kkp_credit_report.docx</code> — เปิดใน Word ได้ มีตารางและ heading</span></li>
+      <li><span class="check-box"></span><span>ไฟล์ <code>kkp_credit_presentation.pptx</code> — เปิดใน PowerPoint ได้ มี 8 slides</span></li>
+      <li><span class="check-box"></span><span>เข้าใจวิธีใช้ Bob วิเคราะห์ข้อมูลจาก CSV โดยไม่ต้องเขียนโค้ด</span></li>
+    </ul>
+  </section>
+
+  <!-- ── Skills used ── -->
+  <section>
+    <h2>📚 Skills ที่ใช้ใน Workshop นี้</h2>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="name">pptx</div>
+        <div class="desc">ช่วย Bob สร้าง .pptx ที่ถูกต้อง</div>
+      </div>
+      <div class="skill-card">
+        <div class="name">office-insights</div>
+        <div class="desc">ช่วย Bob อ่านและเขียน .docx / .xlsx</div>
+      </div>
+      <div class="skill-card">
+        <div class="name">(built-in)</div>
+        <div class="desc">HTML/CSS/JavaScript สร้างได้ทันทีโดยไม่ต้อง skill พิเศษ</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Quiz ── -->
+  <section id="quiz-section">
+    <h2>🧠 Quiz — ทดสอบความเข้าใจ</h2>
+    <p style="color:#57606a;font-size:14px;margin-bottom:20px;">ตอบคำถาม 5 ข้อต่อไปนี้เพื่อทบทวนสิ่งที่เรียนรู้ใน Workshop นี้</p>
+
+    <div class="quiz-list">
+
+      <!-- Q1 -->
+      <div class="quiz-card" id="q1">
+        <div class="quiz-q"><span class="quiz-num">1</span>IBM Bob ใช้ Skill ใดในการสร้างไฟล์ PowerPoint (.pptx)?</div>
+        <div class="quiz-options">
+          <label class="quiz-opt"><input type="radio" name="q1" value="a"> <span>office-insights</span></label>
+          <label class="quiz-opt"><input type="radio" name="q1" value="b"> <span>pptx</span></label>
+          <label class="quiz-opt"><input type="radio" name="q1" value="c"> <span>xlsx</span></label>
+          <label class="quiz-opt"><input type="radio" name="q1" value="d"> <span>ไม่ต้องติดตั้ง Skill เพิ่มเติม</span></label>
+        </div>
+        <div class="quiz-feedback" id="q1-feedback"></div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="quiz-card" id="q2">
+        <div class="quiz-q"><span class="quiz-num">2</span>ในไฟล์ <code>kkp_loan_data.csv</code> คอลัมน์ใดบ่งบอกว่าลูกค้ามีหนี้ค้างชำระ?</div>
+        <div class="quiz-options">
+          <label class="quiz-opt"><input type="radio" name="q2" value="a"> <span>credit_score</span></label>
+          <label class="quiz-opt"><input type="radio" name="q2" value="b"> <span>loan_amount_thb</span></label>
+          <label class="quiz-opt"><input type="radio" name="q2" value="c"> <span>days_overdue</span></label>
+          <label class="quiz-opt"><input type="radio" name="q2" value="d"> <span>interest_rate_pct</span></label>
+        </div>
+        <div class="quiz-feedback" id="q2-feedback"></div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="quiz-card" id="q3">
+        <div class="quiz-q"><span class="quiz-num">3</span>ผลลัพธ์ที่ Workshop นี้ต้องการสร้างมีกี่รูปแบบ และรูปแบบใดบ้าง?</div>
+        <div class="quiz-options">
+          <label class="quiz-opt"><input type="radio" name="q3" value="a"> <span>2 รูปแบบ: HTML และ DOCX</span></label>
+          <label class="quiz-opt"><input type="radio" name="q3" value="b"> <span>3 รูปแบบ: HTML, DOCX และ PPTX</span></label>
+          <label class="quiz-opt"><input type="radio" name="q3" value="c"> <span>3 รูปแบบ: PDF, DOCX และ XLSX</span></label>
+          <label class="quiz-opt"><input type="radio" name="q3" value="d"> <span>4 รูปแบบ: HTML, DOCX, PPTX และ PDF</span></label>
+        </div>
+        <div class="quiz-feedback" id="q3-feedback"></div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="quiz-card" id="q4">
+        <div class="quiz-q"><span class="quiz-num">4</span>ข้อใดอธิบาย Skill <strong>office-insights</strong> ได้ถูกต้องที่สุด?</div>
+        <div class="quiz-options">
+          <label class="quiz-opt"><input type="radio" name="q4" value="a"> <span>ช่วย Bob วิเคราะห์ข้อมูลทางการเงิน</span></label>
+          <label class="quiz-opt"><input type="radio" name="q4" value="b"> <span>ช่วย Bob อ่านและเขียนไฟล์ .docx, .xlsx และ .pptx ได้อย่างถูกต้อง</span></label>
+          <label class="quiz-opt"><input type="radio" name="q4" value="c"> <span>ช่วย Bob สร้างกราฟและ Chart ใน HTML</span></label>
+          <label class="quiz-opt"><input type="radio" name="q4" value="d"> <span>ช่วย Bob เชื่อมต่อกับ Microsoft 365 API</span></label>
+        </div>
+        <div class="quiz-feedback" id="q4-feedback"></div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="quiz-card" id="q5">
+        <div class="quiz-q"><span class="quiz-num">5</span>เมื่อ Bob สร้างไฟล์ HTML Dashboard ใน Step 3 ควรใช้ library ใดในการสร้างกราฟ?</div>
+        <div class="quiz-options">
+          <label class="quiz-opt"><input type="radio" name="q5" value="a"> <span>D3.js</span></label>
+          <label class="quiz-opt"><input type="radio" name="q5" value="b"> <span>Highcharts</span></label>
+          <label class="quiz-opt"><input type="radio" name="q5" value="c"> <span>Chart.js จาก CDN</span></label>
+          <label class="quiz-opt"><input type="radio" name="q5" value="d"> <span>Google Charts</span></label>
+        </div>
+        <div class="quiz-feedback" id="q5-feedback"></div>
+      </div>
+
+    </div>
+
+    <div style="text-align:center;margin-top:24px;">
+      <button class="quiz-submit-btn" onclick="submitQuiz()">ตรวจคำตอบ</button>
+    </div>
+    <div class="quiz-score-box" id="quiz-score" style="display:none;"></div>
+  </section>
+
+</div>
+
+<footer class="page-footer">
+  KKP x IBM Bob Workshop · Business Track · June 2024<br>
+  <span style="font-size:11px;opacity:0.7;">Made with IBM Bob</span>
+</footer>
+
+<script>
+function copyPrompt(btn) {
+  const text = btn.previousElementSibling.innerText;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+var quizAnswers = { q1:'b', q2:'c', q3:'b', q4:'b', q5:'c' };
+var quizExplain = {
+  q1: 'Skill <strong>pptx</strong> สอน Bob วิธีสร้างไฟล์ PowerPoint ที่ถูกต้องตามมาตรฐาน OpenXML',
+  q2: 'คอลัมน์ <strong>days_overdue</strong> บอกจำนวนวันที่ค้างชำระ ถ้า > 0 แสดงว่ามีหนี้ค้าง',
+  q3: 'Workshop นี้สร้าง <strong>3 รูปแบบ</strong>: Interactive HTML Dashboard, Word Report (.docx) และ PowerPoint (.pptx)',
+  q4: '<strong>office-insights</strong> เป็น Skill ที่ช่วยให้ Bob อ่านและเขียนไฟล์ Office format ได้ถูกต้อง',
+  q5: 'Workshop นี้ใช้ <strong>Chart.js จาก CDN</strong> เพราะไม่ต้อง install และ Bob สร้างได้ทันที'
+};
+
+function submitQuiz() {
+  var score = 0;
+  var total = 5;
+  for (var i = 1; i <= total; i++) {
+    var qid = 'q' + i;
+    var sel = document.querySelector('input[name="' + qid + '"]:checked');
+    var card = document.getElementById(qid);
+    var fb = document.getElementById(qid + '-feedback');
+    var opts = card.querySelectorAll('.quiz-opt');
+    opts.forEach(function(opt) {
+      opt.classList.remove('correct','wrong');
+      var inp = opt.querySelector('input');
+      if (inp.value === quizAnswers[qid]) opt.classList.add('correct');
+    });
+    if (sel) {
+      if (sel.value === quizAnswers[qid]) {
+        score++;
+        fb.innerHTML = '✅ ถูกต้อง! ' + quizExplain[qid];
+        fb.className = 'quiz-feedback fb-correct';
+      } else {
+        card.querySelector('input[value="' + sel.value + '"]').closest('.quiz-opt').classList.add('wrong');
+        fb.innerHTML = '❌ ไม่ถูกต้อง — ' + quizExplain[qid];
+        fb.className = 'quiz-feedback fb-wrong';
+      }
+    } else {
+      fb.innerHTML = '⚠️ กรุณาเลือกคำตอบ';
+      fb.className = 'quiz-feedback fb-warn';
+    }
+    fb.style.display = 'block';
+  }
+  var box = document.getElementById('quiz-score');
+  var pct = Math.round((score/total)*100);
+  var msg = score === total ? '🎉 ยอดเยี่ยม! คุณผ่านทุกข้อ!' : score >= 3 ? '👍 ผ่านแล้ว! ทบทวนข้อที่ผิดอีกครั้ง' : '📖 ลองทบทวน Workshop อีกครั้งนะ';
+  box.innerHTML = '<div class="score-big">' + score + ' / ' + total + '</div><div class="score-pct">' + pct + '%</div><div class="score-msg">' + msg + '</div>';
+  box.style.display = 'block';
+  box.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+</script>
+
+<style>
+  /* ── Quiz styles ── */
+  .quiz-list { display: flex; flex-direction: column; gap: 16px; }
+  .quiz-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .quiz-q {
+    font-weight: 600;
+    font-size: 15px;
+    color: #1f2328;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .quiz-num {
+    width: 26px; height: 26px;
+    background: #003087;
+    color: #fff;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.12s, border-color 0.12s;
+    user-select: none;
+  }
+  .quiz-opt:hover { background: #f0f4ff; border-color: #b3c7f0; }
+  .quiz-opt input[type="radio"] { accent-color: #003087; flex-shrink: 0; }
+  .quiz-opt.correct { background: #f0fdf4; border-color: #86efac; color: #166534; font-weight: 600; }
+  .quiz-opt.wrong   { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
+  .quiz-feedback {
+    display: none;
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: 7px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .fb-correct { background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
+  .fb-wrong   { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; }
+  .fb-warn    { background: #fffbeb; border: 1px solid #fde68a; color: #78350f; }
+  .quiz-submit-btn {
+    background: #003087;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 11px 36px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: inherit;
+  }
+  .quiz-submit-btn:hover { background: #00256b; }
+  .quiz-score-box {
+    margin-top: 20px;
+    background: #f0f4ff;
+    border: 2px solid #b3c7f0;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+  }
+  .score-big { font-size: 48px; font-weight: 800; color: #003087; line-height: 1; }
+  .score-pct { font-size: 18px; color: #57606a; margin: 4px 0 10px; }
+  .score-msg { font-size: 16px; font-weight: 600; color: #1f2328; }
+</style>
+</body>
+</html>

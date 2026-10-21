@@ -1,0 +1,21 @@
+employee_id,name,department,role,years_at_kkp,age,gender,education_level,performance_score_2023,training_hours_2023,ai_tool_usage_score,digital_literacy_score,monthly_salary_thb,overtime_hours_month,sick_days_2023,satisfaction_score,promotion_eligible
+E-001,Nattawut Boonrak,Risk Management,Senior Analyst,8,34,M,Master,4.2,42,3.8,4.1,85000,12,2,4.0,Yes
+E-002,Siriporn Charoenwong,Retail Banking,Branch Manager,12,45,F,Bachelor,4.5,28,2.9,3.5,120000,18,1,3.8,Yes
+E-003,Thanakorn Phromma,Technology,Software Engineer,3,27,M,Bachelor,3.8,65,4.7,4.8,72000,8,3,4.2,No
+E-004,Malee Prathum,Compliance,Compliance Officer,6,38,F,Master,4.0,55,3.2,3.9,78000,10,4,3.5,No
+E-005,Pichit Kaewmanee,Finance,Finance Analyst,5,31,M,Bachelor,3.5,38,3.5,3.8,68000,15,2,3.2,No
+E-006,Rungthiwa Srichai,Human Resources,HR Specialist,4,29,F,Bachelor,4.1,48,3.9,4.0,62000,6,1,4.5,No
+E-007,Vittaya Somboon,Risk Management,Risk Manager,15,50,M,Master,4.6,35,3.0,3.6,145000,20,0,4.1,Yes
+E-008,Patcharee Moonkham,Technology,Data Engineer,2,25,F,Master,3.9,72,4.9,4.9,68000,5,2,4.3,No
+E-009,Somsak Thipmontree,Retail Banking,Relationship Manager,9,41,M,Bachelor,3.7,22,2.5,3.2,95000,25,5,2.9,No
+E-010,Kulaya Phetcharat,Investment,Portfolio Analyst,7,36,F,Master,4.4,45,4.2,4.3,105000,14,1,4.4,Yes
+E-011,Narong Wanchai,Compliance,Legal Officer,11,48,M,Master,4.3,40,2.8,3.4,98000,8,3,3.7,Yes
+E-012,Duangjai Phansiri,Finance,CFO Office,20,55,F,PhD,4.8,30,3.1,3.7,180000,22,0,3.9,Yes
+E-013,Kittipong Rattanapan,Technology,DevOps Engineer,1,24,M,Bachelor,3.6,80,4.8,4.9,65000,10,1,3.8,No
+E-014,Suphanida Suksri,Retail Banking,Teller,3,26,F,Bachelor,3.4,20,2.2,3.0,42000,8,6,2.8,No
+E-015,Chalerm Nakorn,Risk Management,Credit Analyst,10,44,M,Bachelor,4.1,35,3.4,3.8,88000,16,2,3.6,Yes
+E-016,Nipa Chaichan,Human Resources,Training Manager,8,40,F,Master,4.3,60,4.0,4.2,92000,5,1,4.6,Yes
+E-017,Peerapong Siriwan,Investment,Investment Advisor,6,33,M,Master,4.5,50,4.1,4.4,110000,12,0,4.7,Yes
+E-018,Wantanee Thepwan,Compliance,AML Specialist,4,30,F,Bachelor,3.8,58,3.6,4.0,70000,9,2,3.9,No
+E-019,Sukit Phrommin,Technology,IT Manager,14,46,M,Master,4.4,42,4.3,4.5,135000,15,1,4.0,Yes
+E-020,Anchisa Phetthong,Finance,Accountant,5,32,F,Bachelor,3.6,32,3.0,3.5,58000,11,3,3.3,No

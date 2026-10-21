@@ -1,0 +1,31 @@
+loan_id,customer_id,customer_name,age,gender,occupation,annual_income_thb,loan_amount_thb,loan_type,interest_rate_pct,loan_term_months,credit_score,collateral_type,province,approval_status,default_flag,days_overdue,disbursement_date,last_payment_date
+LN-0001,C-1001,Somchai Jaidee,42,M,Business Owner,1800000,500000,SME Loan,6.5,36,720,Property,Bangkok,Approved,0,0,2023-01-15,2024-05-15
+LN-0002,C-1002,Wanida Sriwong,35,F,Salaried Employee,480000,200000,Personal Loan,8.0,24,680,None,Chiang Mai,Approved,0,0,2023-02-01,2024-05-01
+LN-0003,C-1003,Prasit Moonkham,55,M,Farmer,320000,150000,Agricultural Loan,4.5,60,590,Land,Udon Thani,Approved,1,45,2022-11-10,2024-03-10
+LN-0004,C-1004,Nattaya Thongdee,29,F,Freelancer,360000,80000,Personal Loan,9.5,12,610,None,Bangkok,Approved,0,0,2023-06-20,2024-05-20
+LN-0005,C-1005,Krit Panyawut,48,M,Business Owner,2400000,1200000,SME Loan,5.8,48,750,Property,Rayong,Approved,0,0,2023-03-05,2024-05-05
+LN-0006,C-1006,Siriporn Nakarin,33,F,Salaried Employee,540000,300000,Home Loan,3.9,240,700,Property,Nonthaburi,Approved,0,0,2022-08-15,2024-05-15
+LN-0007,C-1007,Anucha Boonmee,61,M,Retired,280000,100000,Personal Loan,10.0,24,560,None,Khon Kaen,Rejected,0,0,,
+LN-0008,C-1008,Malee Sukjai,38,F,Salaried Employee,660000,450000,Home Loan,3.7,180,730,Property,Bangkok,Approved,0,0,2023-04-01,2024-05-01
+LN-0009,C-1009,Thana Rungrot,45,M,Business Owner,1200000,600000,SME Loan,6.2,36,695,Vehicle,Chonburi,Approved,1,30,2023-01-25,2024-04-25
+LN-0010,C-1010,Pornpan Chaiyasit,27,F,Salaried Employee,420000,120000,Personal Loan,8.5,18,645,None,Chiang Rai,Approved,0,0,2023-07-10,2024-05-10
+LN-0011,C-1011,Wichai Rattana,52,M,Farmer,250000,80000,Agricultural Loan,4.0,48,570,Land,Nakhon Ratchasima,Approved,1,90,2022-06-01,2024-02-01
+LN-0012,C-1012,Sutida Phongsak,31,F,Business Owner,900000,400000,SME Loan,6.8,24,710,Property,Phuket,Approved,0,0,2023-05-15,2024-05-15
+LN-0013,C-1013,Boonlert Kamnan,67,M,Retired,220000,50000,Personal Loan,11.0,12,520,None,Lampang,Rejected,0,0,,
+LN-0014,C-1014,Chanida Wongsa,36,F,Salaried Employee,720000,550000,Home Loan,3.5,300,745,Property,Bangkok,Approved,0,0,2022-12-01,2024-05-01
+LN-0015,C-1015,Pisit Arundee,43,M,Business Owner,1500000,750000,SME Loan,6.0,60,725,Property,Samut Prakan,Approved,0,0,2023-02-20,2024-05-20
+LN-0016,C-1016,Rungrudee Phimpha,40,F,Salaried Employee,500000,180000,Personal Loan,8.2,24,655,None,Pathum Thani,Approved,0,0,2023-08-01,2024-05-01
+LN-0017,C-1017,Noppadol Sombat,58,M,Farmer,300000,120000,Agricultural Loan,4.2,36,580,Land,Chiang Mai,Approved,1,60,2022-09-15,2024-03-15
+LN-0018,C-1018,Apinya Chokdee,24,F,Freelancer,240000,50000,Personal Loan,12.0,12,490,None,Bangkok,Rejected,0,0,,
+LN-0019,C-1019,Teerayuth Kanchai,50,M,Business Owner,3000000,2000000,SME Loan,5.5,60,770,Property,Bangkok,Approved,0,0,2023-03-10,2024-05-10
+LN-0020,C-1020,Patchara Nilsiri,32,F,Salaried Employee,600000,350000,Home Loan,3.8,120,715,Property,Nonthaburi,Approved,0,0,2023-06-01,2024-05-01
+LN-0021,C-1021,Chaiwat Duangsri,47,M,Business Owner,2100000,900000,SME Loan,5.9,48,740,Property,Chonburi,Approved,0,0,2023-01-20,2024-05-20
+LN-0022,C-1022,Ladda Mongkol,39,F,Salaried Employee,450000,160000,Personal Loan,8.8,18,630,None,Ubon Ratchathani,Approved,1,15,2023-09-01,2024-04-01
+LN-0023,C-1023,Surasak Phumphong,54,M,Farmer,270000,90000,Agricultural Loan,4.3,48,565,Land,Khon Kaen,Approved,0,0,2022-10-01,2024-05-01
+LN-0024,C-1024,Saranya Boontham,28,F,Salaried Employee,396000,100000,Personal Loan,9.0,12,600,None,Chiang Mai,Approved,0,0,2023-10-15,2024-05-15
+LN-0025,C-1025,Mongkol Phetsri,44,M,Business Owner,1650000,700000,SME Loan,6.1,36,730,Vehicle,Rayong,Approved,0,0,2023-04-05,2024-05-05
+LN-0026,C-1026,Pornthip Siripat,37,F,Salaried Employee,576000,280000,Home Loan,4.0,120,695,Property,Bangkok,Approved,0,0,2023-07-15,2024-05-15
+LN-0027,C-1027,Kitti Wongsawat,62,M,Retired,240000,60000,Personal Loan,10.5,12,540,None,Phitsanulok,Rejected,0,0,,
+LN-0028,C-1028,Nipa Srisuwan,34,F,Business Owner,780000,320000,SME Loan,7.0,24,675,None,Phuket,Approved,0,0,2023-05-20,2024-05-20
+LN-0029,C-1029,Arthit Komonwong,49,M,Business Owner,2700000,1500000,SME Loan,5.7,60,760,Property,Bangkok,Approved,0,0,2023-02-10,2024-05-10
+LN-0030,C-1030,Kanokwan Saetang,26,F,Freelancer,300000,70000,Personal Loan,11.5,12,510,None,Nakhon Si Thammarat,Rejected,0,0,,
