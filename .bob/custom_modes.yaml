@@ -9,7 +9,7 @@ customModes:
       - read
       - skill
   - slug: ask
-    name: "❓ Ask"
+    name: "Ask"
     description: Settlement-policy oracle.
     roleDefinition: You are a settlement-policy oracle. Answer from your
       training knowledge; file access is unnecessary for policy questions.

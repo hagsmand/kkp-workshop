@@ -2,7 +2,6 @@
 
 | Category | Deadline | Fee |
 |---|---|---|
-| Digital goods | 30 days from purchase | None |
 | Physical goods | 14 days from delivery | 50 baht |
 | Airtime top-ups | Non-refundable | — |
 

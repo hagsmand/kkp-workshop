@@ -1,3 +1,4 @@
 node_modules/
 *.log
 docs/payout-schedule.md
+workshop-developer/lab/docs/payout-schedule.md

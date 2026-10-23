@@ -1,0 +1,1 @@
+- The true refund deadline for digital goods is 7 days.
