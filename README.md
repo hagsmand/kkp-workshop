@@ -1,7 +1,7 @@
 # 🎓 KKP x IBM Bob Workshop
 ### AI-Powered Productivity — Hands-on Lab Guide
 
-> **Session Duration:** 2 hours total · Part of KKP AI Inflection Point Workshop  
+> **Session Duration:** Business track 60 minutes; developer track 60 minutes (separate sessions).
 > **Facilitator:** KKP Digital Innovation Team
 
 ---
@@ -18,10 +18,11 @@ kkp-workshop/
 │       ├── kkp_loan_data.csv        ← ข้อมูลสินเชื่อจำลอง (30 รายการ)
 │       └── kkp_employee_data.csv    ← ข้อมูลพนักงานจำลอง (20 คน)
 │
-└── workshop-developer/              ← 💻 Track สำหรับ Developers
-    ├── README.md                    ← คู่มือ Workshop พร้อม Prompts
-    └── data/
-        └── kkp_transactions.csv     ← ข้อมูล Transaction จำลอง (35 รายการ)
+└── workshop-developer/              ← 💻 Track สำหรับ Developers (60 นาที)
+    ├── index.html                   ← คู่มือ Workshop หน้าเดียว (เปิดในเบราว์เซอร์)
+    ├── lab/                         ← Settlement Desk lab ที่มีบั๊ก (แก้ได้เฉพาะ server.mjs)
+    ├── facilitator/                 ← เฉพาะ facilitator (ห้ามแจกจ่าย)
+    └── dist/                        ← participant ZIP ที่สร้างตอนแจกจ่าย
 ```
 
 ---
@@ -33,9 +34,9 @@ kkp-workshop/
 | **เหมาะสำหรับ** | Analyst, Risk, Compliance, HR | Developer, IT, Data Engineer |
 | **ไม่ต้องใช้** | เขียนโค้ด | — |
 | **เครื่องมือหลัก** | IBM Bob + CSV data | IBM Bob + Node.js |
-| **ผลลัพธ์** | HTML Dashboard, Word Report, PowerPoint | REST API + Dashboard Website |
+| **ผลลัพธ์** | HTML Dashboard, Word Report, PowerPoint | Repaired settlement job, 5/5 acceptance tests green, winning word |
 | **เวลา** | 60 นาที | 60 นาที |
-| **เปิดคู่มือ** | [workshop-business/README.md](workshop-business/README.md) | [workshop-developer/README.md](workshop-developer/README.md) |
+| **เปิดคู่มือ** | [workshop-business/README.md](workshop-business/README.md) | [workshop-developer/index.html](workshop-developer/index.html) |
 
 ---
 
@@ -47,9 +48,10 @@ kkp-workshop/
 3. เปิด [`workshop-business/README.md`](workshop-business/README.md) และทำตาม Step 1–5
 
 ### สำหรับ Developers
-1. ตรวจสอบ Node.js: `node --version` (ต้องการ v18+)
-2. เปิด IBM Bob ใน workspace นี้
-3. เปิด [`workshop-developer/README.md`](workshop-developer/README.md) และทำตาม Step 1–5
+1. ตรวจสอบ Node.js: `node --version` (ต้องการ v20+) และเตรียม IBM Bob Base โดยไม่ใช้ Premium packages
+2. เปิด [`workshop-developer/index.html`](workshop-developer/index.html) ในเบราว์เซอร์ — คู่มือทั้งหมดอยู่ในหน้าเดียว (60 นาที)
+3. เปิดโฟลเดอร์ `workshop-developer/` ใน Bob แล้วทำตาม Step 1–5 ในหน้าคู่มือ (แก้ได้เฉพาะ `lab/server.mjs`)
+4. ไม่มี npm dependencies, credentials, production access หรือ external application services; Bob inference ยังต้องใช้ service connection ที่เตรียมไว้
 
 ---
 
@@ -69,13 +71,10 @@ kkp-workshop/
 - **ตัวชี้วัด:** Performance Score, Training Hours, AI Tool Usage Score
 - **HR Data:** Salary, Satisfaction Score, Promotion Eligibility
 
-### 💻 Developer — `kkp_transactions.csv`
-ข้อมูล Financial Transaction จำลอง 35 รายการ ครอบคลุม:
-- **ประเภท:** Purchase, Transfer, ATM Withdrawal
-- **ช่องทาง:** Mobile App, Internet Banking, ATM, Credit Card
-- **สถานะ:** Success (29), Flagged (4), Failed (2)
-- **Security:** Fraud Flag, Risk Score (0–100), Auth Method
-- **Tech:** Device Type, Channel, Timestamp
+### 💻 Developer — Settlement Desk incident
+แอป settlement จำลอง (10 รายการ, 3 ร้านค้า) ที่ deploy v2.3.0 ทำให้จ่ายเงินผิด 3 อาการ: จ่ายซ้ำ, จ่ายรายการนอกวันทำการ และยอดต่าง 1 satang
+ผู้เรียนใช้ Bob Ask สืบหาสาเหตุจากหลักฐาน อนุมัติ diff ผ่าน Bob Agent ผ่าน acceptance tests 5 ข้อ และเก็บตัวอักษรจากทั้ง 3 challenge ประกอบเป็น winning word
+เหตุการณ์เป็นเรื่องสมมติ ไม่ใช่ incident จริงของ KKP; starter ตั้งใจให้ tests ไม่ผ่าน
 
 ---
 
@@ -89,11 +88,10 @@ kkp-workshop/
 - [ ] เข้าใจการใช้ Skills ใน IBM Bob Marketplace
 
 ### Developer Track
-- [ ] ใช้ Bob เป็น Pair Programmer ออกแบบ API
-- [ ] สร้าง Express.js REST API อ่าน CSV ได้จริง
-- [ ] สร้าง Frontend Website เรียก API ด้วย fetch()
-- [ ] เพิ่ม Filter, Search, และ Charts
-- [ ] Debug และ Extend โค้ดด้วยความช่วยเหลือจาก Bob
+- [ ] ใช้ Bob Ask เปรียบเทียบสมมติฐานกับหลักฐาน ไม่ใช่เดาสาเหตุ
+- [ ] ตรวจและอนุมัติ diff ของ Bob Agent ก่อนทำจริง
+- [ ] ซ่อม settlement job ให้จ่ายเงินถูกต้องครบทั้ง 3 challenge
+- [ ] พิสูจน์ผลด้วย acceptance tests 5 ข้อที่รันจริง และ winning word ที่ประกอบจากตัวอักษรของทั้ง 3 challenge
 
 ---
 
@@ -104,8 +102,8 @@ kkp-workshop/
 | `pptx` | Business | Marketplace → ค้นหา "pptx" → Install |
 | `office-insights` | Business | Marketplace → ค้นหา "office" → Install |
 | `xlsx` | Business (optional) | Marketplace → ค้นหา "xlsx" → Install |
-| `use-uv` | Developer (Python option) | Marketplace → ค้นหา "uv" → Install |
+| ไม่ต้องติดตั้ง Skills เพิ่ม | Developer | ใช้ core Ask / Plan / Agent; ไม่ใช้ Premium, MCP หรือ trial |
 
 ---
 
-*KKP x IBM Bob Workshop · June 2024 · Prepared by KKP Digital Innovation Team*
+*KKP x IBM Bob Workshop · October 2026 · Prepared by KKP Digital Innovation Team*
