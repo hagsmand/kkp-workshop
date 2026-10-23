@@ -1,0 +1,10 @@
+# Project custom modes (snapshot 2026-10-20, pre-v2.3.0).
+customModes:
+  - slug: reviewer
+    name: "🔎 Reviewer"
+    description: Reviews payout code for satang-safety.
+    roleDefinition: You are a careful code reviewer for payment code.
+    whenToUse: Use this mode to review changes to payout code.
+    groups:
+      - read
+      - skill
