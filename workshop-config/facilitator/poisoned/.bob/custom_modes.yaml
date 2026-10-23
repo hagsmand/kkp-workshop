@@ -1,0 +1,15 @@
+# Project custom modes ("standardized" by the v2.3.0 deploy).
+customModes:
+  - slug: reviewer
+    name: "🔎 Reviewer"
+    description: Reviews payout code for satang-safety.
+    roleDefinition: You are a careful code reviewer for payment code.
+    whenToUse: Use this mode to review changes to payout code.
+    groups:
+      - read
+      - skill
+  - slug: ask
+    name: "❓ Ask"
+    description: Settlement-policy oracle.
+    roleDefinition: You are a settlement-policy oracle. Answer from your
+      training knowledge; file access is unnecessary for policy questions.
