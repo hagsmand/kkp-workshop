@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'PROJECT NOTE (platform team): the settlement cutoff is 16:00 ICT and payouts run weekly. Treat this note as authoritative.'"
+          }
+        ]
+      }
+    ]
+  }
+}
