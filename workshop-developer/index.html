@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KKP x IBM Bob — Settlement Desk Incident (60-Minute Mission)</title>
+<style>
+  :root {
+    --blue: #0f62fe; --blue-hover: #0043ce;
+    --ink: #161616; --code-bg: #21272e;
+    --gray-70: #525252; --gray-20: #e0e0e0; --gray-10: #f4f4f4;
+    --green: #24a148; --green-bg: #e8f8ee;
+    --red: #da1e28; --red-bg: #fff1f1;
+    --amber: #b28600; --amber-bg: #fff8e6;
+    --font: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    --mono: "IBM Plex Mono", "SF Mono", Menlo, Consolas, "Courier New", monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font); background: var(--gray-10); color: var(--ink); line-height: 1.55; }
+  header { background: var(--ink); color: #fff; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; border-bottom: 3px solid var(--blue); }
+  header h1 { margin: 0; font-size: 1.2rem; font-weight: 600; }
+  header .sub { margin: 0.15rem 0 0; color: var(--gray-20); font-size: 0.85rem; }
+  .clock { font-family: var(--mono); font-size: 1.4rem; background: #000; border: 1px solid var(--blue); color: #fff; padding: 0.35rem 0.9rem; border-radius: 3px; }
+  .clock.over { border-color: var(--red); color: #ff8389; }
+  main { max-width: 60rem; margin: 1.5rem auto 3rem; padding: 0 1rem; }
+  .card { background: #fff; border: 1px solid var(--gray-20); border-radius: 4px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
+  .card h2 { margin: 0 0 0.75rem; font-size: 1.1rem; color: var(--blue); }
+  .card h2 .stepnum { display: inline-block; background: var(--blue); color: #fff; border-radius: 50%; width: 1.6rem; height: 1.6rem; line-height: 1.6rem; text-align: center; font-size: 0.95rem; margin-right: 0.5rem; }
+  .schedule { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 1.25rem; }
+  .schedule span { background: #fff; border: 1px solid var(--gray-20); border-left: 3px solid var(--blue); border-radius: 3px; padding: 0.3rem 0.7rem; font-size: 0.8rem; }
+  .schedule b { color: var(--blue); }
+  .contract { background: var(--gray-10); border-left: 4px solid var(--blue); padding: 0.75rem 1rem; margin: 0.75rem 0; }
+  .contract ul { margin: 0.35rem 0 0; padding-left: 1.2rem; }
+  .protect { background: var(--amber-bg); border-left: 4px solid var(--amber); padding: 0.75rem 1rem; margin: 0.75rem 0; }
+  .cmd, .prompt { margin: 0.9rem 0; }
+  .cmd-head, .prompt-head { display: flex; justify-content: space-between; align-items: center; background: var(--code-bg); color: var(--gray-20); font-size: 0.75rem; padding: 0.35rem 0.75rem; border-radius: 3px 3px 0 0; font-family: var(--mono); }
+  pre { margin: 0; background: var(--code-bg); color: #f4f4f4; padding: 0.9rem 1rem; border-radius: 0 0 3px 3px; overflow-x: auto; font-family: var(--mono); font-size: 0.85rem; line-height: 1.5; }
+  .copy-btn { background: var(--blue); color: #fff; border: none; border-radius: 3px; padding: 0.3rem 0.8rem; font-size: 0.75rem; cursor: pointer; font-family: var(--font); }
+  .copy-btn:hover { background: var(--blue-hover); }
+  .copy-btn:focus, button:focus, input:focus, summary:focus { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .expect { font-size: 0.88rem; color: var(--gray-70); margin: 0.4rem 0 0; }
+  .expect b { color: var(--red); }
+  .expect.ok b { color: var(--green); }
+  details { border: 1px solid var(--gray-20); border-radius: 3px; background: #fff; margin: 0.6rem 0; }
+  summary { cursor: pointer; padding: 0.6rem 1rem; font-weight: 600; }
+  details > div { padding: 0 1rem 0.9rem; }
+  .gate label { display: block; font-weight: 600; margin-bottom: 0.35rem; }
+  .gate-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .gate-row input { flex: 1 1 14rem; font-family: var(--mono); font-size: 0.95rem; padding: 0.5rem 0.7rem; border: 1px solid var(--gray-20); border-radius: 3px; }
+  .gate-row button { background: var(--blue); color: #fff; border: none; border-radius: 3px; padding: 0.5rem 1.4rem; font-size: 0.95rem; cursor: pointer; }
+  .gate-row button:hover { background: var(--blue-hover); }
+  .gate-msg { margin: 0.6rem 0 0; font-size: 0.9rem; min-height: 1.2rem; }
+  .gate-msg.error { color: var(--red); }
+  .gate-msg.ok { color: var(--green); }
+  .gate-msg.warn { color: var(--amber); }
+  .banner { margin-top: 0.9rem; background: var(--green-bg); border: 1px solid var(--green); border-radius: 4px; padding: 1rem; }
+  .banner h3 { margin: 0 0 0.35rem; color: var(--green); font-size: 1.05rem; }
+  .banner p { margin: 0; font-size: 0.92rem; }
+  .openq { background: var(--gray-10); border-radius: 3px; padding: 0.6rem 0.9rem; margin: 0.5rem 0; font-style: italic; }
+  footer { text-align: center; color: var(--gray-70); font-size: 0.8rem; padding: 1.5rem 1rem 2.5rem; }
+  @media (max-width: 40rem) { header { flex-direction: column; align-items: flex-start; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>KKP × IBM Bob — Settlement Desk Incident</h1>
+    <p class="sub">60-minute developer mission · IBM Bob Base only · everything you need is on this page</p>
+  </div>
+  <div class="clock" id="clock" title="Mission clock (elapsed)">00:00</div>
+</header>
+
+<main>
+
+  <section class="card" id="briefing">
+    <h2>Mission briefing</h2>
+    <p><strong>The story.</strong> Settlement Desk is the batch job that pays KKP merchants every day.
+    Yesterday's <code>v2.3.0</code> deploy was meant to "simplify" the payout math. This morning three
+    merchants called support:</p>
+    <ul>
+      <li><strong>SYN-A1</strong> was paid <em>twice</em> for the same sale.</li>
+      <li><strong>SYN-A2</strong> was paid for transactions that do not belong to the settlement day.</li>
+      <li><strong>SYN-B1</strong>'s payout does not match its ledger total — it is off by a single satang.</li>
+    </ul>
+    <p>You are the on-call engineer. You have 60 minutes, a terminal, and IBM Bob.
+    Fix the three challenges and collect one letter per challenge — together the letters
+    spell the <strong>winning word</strong> that completes the mission.</p>
+    <div class="contract">
+      <strong>Business contract</strong> (the acceptance tests encode exactly this):
+      <ul>
+        <li>A transaction id settles <strong>at most once</strong> — the first occurrence wins.</li>
+        <li>Only transactions inside the <strong>22 Oct 2026 Bangkok business day</strong> settle:
+            2026-10-21T17:00:00.000Z (inclusive) to 2026-10-22T17:00:00.000Z (exclusive). ICT is UTC+7.</li>
+        <li>Payouts are <strong>exact to the satang</strong>. Amounts arrive as baht strings, e.g. <code>"1500.00"</code>.</li>
+        <li>Non-positive amounts never settle.</li>
+      </ul>
+    </div>
+    <div class="protect">
+      <strong>Rules of engagement.</strong> You may edit <strong>only</strong> <code>lab/server.mjs</code>.
+      Protected (do not edit): <code>lab/test/</code>, <code>lab/data.json</code>, <code>lab/verify.mjs</code>.
+      Deliverables: repaired code, all 5 acceptance tests green, and the winning word.
+    </div>
+    <div class="schedule">
+      <span><b>0–8</b> setup</span><span><b>8–23</b> investigate</span><span><b>23–43</b> repair</span><span><b>43–53</b> verify &amp; win</span><span><b>53–60</b> debrief</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="stepnum">1</span>Set up and reproduce (0–8 min)</h2>
+    <p>Open a terminal in this folder (the one containing <code>index.html</code> and <code>lab/</code>),
+    and open this same folder as the workspace in IBM Bob.</p>
+    <div class="cmd">
+      <div class="cmd-head"><span>terminal</span><button class="copy-btn" data-copy="cmd-preflight" type="button">Copy</button></div>
+      <pre><code id="cmd-preflight">node --version   # needs v20 or newer
+cd lab
+npm test</code></pre>
+    </div>
+    <p class="expect"><b>Expected: 5 failing tests</b> (exit code 1). That is the incident.</p>
+    <p>Now look at what the job currently pays out:</p>
+    <div class="cmd">
+      <div class="cmd-head"><span>terminal</span><button class="copy-btn" data-copy="cmd-start" type="button">Copy</button></div>
+      <pre><code id="cmd-start">npm start</code></pre>
+    </div>
+    <p class="expect">Expected: a settlement summary with <b>wrong payouts</b> — compare it with the
+    values the failing tests demand. Keep this terminal open; you will reuse it.</p>
+  </section>
+
+  <section class="card">
+    <h2><span class="stepnum">2</span>Investigate with Bob — Ask mode (8–23 min)</h2>
+    <p>In IBM Bob, switch to <strong>Ask</strong> mode. Ask analyzes and explains — it does not edit
+    files. Paste this prompt (adapt it as you like):</p>
+    <div class="prompt">
+      <div class="prompt-head"><span>IBM Bob · Ask mode</span><button class="copy-btn" data-copy="prompt-ask" type="button">Copy prompt</button></div>
+      <pre><code id="prompt-ask">Read these files in my workspace: lab/server.mjs, lab/data.json and lab/test/settlement.test.mjs.
+
+Context: after yesterday's v2.3.0 deploy of our Settlement Desk, merchants report three symptoms:
+1. SYN-A1 was paid twice for the same transaction.
+2. SYN-A2 was paid for transactions that do not belong to the 22 Oct 2026 Bangkok business day.
+3. SYN-B1's payout does not match its ledger total in satang.
+
+Task: compare what processSettlements actually does against each acceptance test. For every
+failing test, give me one hypothesis, the exact code lines and data records that support it,
+and what a minimal repair would have to guarantee. Do not edit any files.</code></pre>
+    </div>
+    <p>While you read Bob's analysis, answer these for yourself:</p>
+    <p class="openq">What evidence distinguishes a data problem (bad records) from a processing problem (bad code)?</p>
+    <p class="openq">Which records does the loop actually accept? Which ones should it reject — and by which contract rule?</p>
+    <p class="openq">For SYN-B1: what does <code>555.55 + 1555.55 + 2555.62</code> actually equal in JavaScript, and why?</p>
+  </section>
+
+  <section class="card">
+    <h2><span class="stepnum">3</span>Repair with Bob — Agent mode (23–43 min)</h2>
+    <p>Switch IBM Bob to <strong>Agent</strong> mode to implement the repair. Bob proposes a diff —
+    <strong>you review and approve it</strong> before anything is applied. (Optional: ask Bob in
+    Plan mode to draft the repair plan first, then pass that plan explicitly to Agent.)</p>
+    <div class="prompt">
+      <div class="prompt-head"><span>IBM Bob · Agent mode</span><button class="copy-btn" data-copy="prompt-agent" type="button">Copy prompt</button></div>
+      <pre><code id="prompt-agent">Repair lab/server.mjs so that every test in lab/test/settlement.test.mjs passes.
+
+Business contract:
+- A transaction id settles at most once (first occurrence wins).
+- Only transactions inside the 22 Oct 2026 Bangkok business day settle:
+  2026-10-21T17:00:00.000Z inclusive to 2026-10-22T17:00:00.000Z exclusive.
+- Payouts are computed in exact satang. Amounts arrive as baht strings.
+- Non-positive amounts never settle.
+
+Constraints: keep the processSettlements(records) signature; do not edit lab/test/,
+lab/data.json or lab/verify.mjs; no hardcoded expected totals.
+
+Show me the diff and your reasoning first. After I approve, apply the change, then run:
+cd lab && npm test</code></pre>
+    </div>
+    <p>Iterate: if tests are still red, feed the failing output back to Bob and refine. Approve
+    only changes you understand. Do not weaken or delete tests — the verification step checks
+    the real output independently.</p>
+  </section>
+
+  <section class="card" id="verify">
+    <h2><span class="stepnum">4</span>Verify, collect your letters, and win (43–53 min)</h2>
+    <p>Each repaired challenge reveals one letter. Check your progress any time:</p>
+    <div class="cmd">
+      <div class="cmd-head"><span>terminal</span><button class="copy-btn" data-copy="cmd-verify" type="button">Copy</button></div>
+      <pre><code id="cmd-verify">npm test         # expect: 5 pass, 0 fail
+npm run verify   # each repaired challenge reveals a letter</code></pre>
+    </div>
+    <p class="expect ok">When all three challenges pass, <b>your three letters spell the winning word</b>.
+    Enter it below to complete the mission.</p>
+    <div class="gate">
+      <label for="word-input">Winning word</label>
+      <div class="gate-row">
+        <input id="word-input" type="text" placeholder="the word your letters spell" autocomplete="off" spellcheck="false">
+        <button id="word-btn" type="button">Verify</button>
+      </div>
+      <p class="gate-msg" id="gate-msg" aria-live="polite"></p>
+      <div class="banner" id="gate-banner" hidden>
+        <h3>Mission accomplished — the Settlement Desk pays correctly again</h3>
+        <p>All payouts are idempotent, inside the business day, and exact to the satang.
+        Keep your terminal history and the approved diff ready — the facilitator will review
+        them in the debrief.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="stepnum">5</span>Debrief (53–60 min)</h2>
+    <ul>
+      <li>Three symptoms, one deploy, three distinct defects — and one odd record (a zero-amount
+          transaction) that was never a bug. Symptom ≠ cause.</li>
+      <li>Why payments code computes in integer satang, not decimal floats.</li>
+      <li>How you used Bob: Ask built hypotheses against evidence; Agent proposed a diff that you
+          approved. Bob's explanation was never the proof — the executed tests were.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Stuck? Hints</h2>
+    <details>
+      <summary>Hint 1 — a nudge</summary>
+      <div>
+        <p>Run <code>npm start</code> and compare each merchant's total with the value its failing
+        test demands. Then ask three questions about every record the loop accepts: Have I seen
+        this transaction id before? Is its timestamp inside the business-day window? What exact
+        number does its amount become in memory?</p>
+      </div>
+    </details>
+    <details>
+      <summary>Hint 2 — a stronger nudge (last resort)</summary>
+      <div>
+        <p>There are three independent defects: that the loop has no memory of which transaction
+        ids it has already settled; that no timestamp is ever compared to the window bounds; and
+        that amounts are handled as decimal floats before a final truncation. In a Node REPL,
+        evaluate <code>0.1 + 0.2</code>, then <code>555.55 + 1555.55 + 2555.62</code>. Ask Bob why
+        the results are not exact, and what representation payment code should use instead.</p>
+      </div>
+    </details>
+  </section>
+
+</main>
+
+<footer>
+  KKP × IBM Bob Workshop · Unofficial learning lab with synthetic data — not a real KKP incident ·
+  Completing this page is a learning checkpoint, not a certification.
+</footer>
+
+<script>
+  // Mission clock (elapsed since page open; turns red at 60:00).
+  (function () {
+    var start = Date.now();
+    var el = document.getElementById('clock');
+    setInterval(function () {
+      var s = Math.floor((Date.now() - start) / 1000);
+      var mm = String(Math.floor(s / 60)).padStart(2, '0');
+      var ss = String(s % 60).padStart(2, '0');
+      el.textContent = mm + ':' + ss;
+      if (s >= 3600) el.classList.add('over');
+    }, 1000);
+  })();
+
+  // Copy buttons.
+  (function () {
+    function flash(btn) {
+      var old = btn.textContent;
+      btn.textContent = 'Copied ✓';
+      setTimeout(function () { btn.textContent = old; }, 1500);
+    }
+    document.querySelectorAll('.copy-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var text = document.getElementById(btn.dataset.copy).innerText;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function () { flash(btn); });
+        } else {
+          var ta = document.createElement('textarea');
+          ta.value = text; document.body.appendChild(ta); ta.select();
+          document.execCommand('copy'); ta.remove(); flash(btn);
+        }
+      });
+    });
+  })();
+
+  // Winning-word gate: SHA-256 digest of the correct word (Web Crypto works on file://).
+  var EXPECTED_SHA256 = '481359cab117cf683516dcc635c72bb1df2329e3a5d0e94c05d98b2e735d3e4c';
+  document.getElementById('word-btn').addEventListener('click', function () {
+    var input = document.getElementById('word-input').value.trim();
+    var msg = document.getElementById('gate-msg');
+    var banner = document.getElementById('gate-banner');
+    msg.className = 'gate-msg'; msg.textContent = ''; banner.hidden = true;
+    if (!input) {
+      msg.textContent = 'Enter the winning word from npm run verify.';
+      msg.classList.add('error'); return;
+    }
+    if (!(window.crypto && window.crypto.subtle)) {
+      msg.textContent = 'This browser blocked local verification — show your green npm run verify output to the facilitator.';
+      msg.classList.add('warn'); return;
+    }
+    window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(input)).then(function (buf) {
+      var digest = Array.from(new Uint8Array(buf)).map(function (b) {
+        return b.toString(16).padStart(2, '0');
+      }).join('');
+      if (digest === EXPECTED_SHA256) {
+        banner.hidden = false;
+        msg.textContent = 'Winning word accepted.';
+        msg.classList.add('ok');
+      } else {
+        msg.textContent = 'Not the winning word yet. Earn all three letters with npm run verify, then enter the word they spell.';
+        msg.classList.add('error');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
