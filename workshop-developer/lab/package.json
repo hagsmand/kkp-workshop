@@ -1,0 +1,16 @@
+{
+  "name": "kkp-settlement-desk-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "KKP x IBM Bob 1-hour workshop - Settlement Desk lab (intentionally broken starter)",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test test/settlement.test.mjs",
+    "verify": "node verify.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
