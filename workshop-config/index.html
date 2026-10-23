@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KKP x IBM Bob — Configuration Incident (60-Minute Mission)</title>
+<style>
+  :root {
+    --blue: #0f62fe; --blue-hover: #0043ce;
+    --ink: #161616; --code-bg: #21272e;
+    --gray-70: #525252; --gray-20: #e0e0e0; --gray-10: #f4f4f4;
+    --green: #24a148; --green-bg: #e8f8ee;
+    --red: #da1e28; --red-bg: #fff1f1;
+    --amber: #b28600; --amber-bg: #fff8e6;
+    --font: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    --mono: "IBM Plex Mono", "SF Mono", Menlo, Consolas, "Courier New", monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font); background: var(--gray-10); color: var(--ink); line-height: 1.55; }
+  header { background: var(--ink); color: #fff; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; border-bottom: 3px solid var(--blue); }
+  header h1 { margin: 0; font-size: 1.2rem; font-weight: 600; }
+  header .sub { margin: 0.15rem 0 0; color: var(--gray-20); font-size: 0.85rem; }
+  .clock { font-family: var(--mono); font-size: 1.4rem; background: #000; border: 1px solid var(--blue); color: #fff; padding: 0.35rem 0.9rem; border-radius: 3px; }
+  .clock.over { border-color: var(--red); color: #ff8389; }
+  main { max-width: 60rem; margin: 1.5rem auto 3rem; padding: 0 1rem; }
+  .card { background: #fff; border: 1px solid var(--gray-20); border-radius: 4px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
+  .card h2 { margin: 0 0 0.75rem; font-size: 1.1rem; color: var(--blue); }
+  .card h2 .stepnum { display: inline-block; background: var(--blue); color: #fff; border-radius: 50%; width: 1.6rem; height: 1.6rem; line-height: 1.6rem; text-align: center; font-size: 0.95rem; margin-right: 0.5rem; }
+  .schedule { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 1.25rem; }
+  .schedule span { background: #fff; border: 1px solid var(--gray-20); border-left: 3px solid var(--blue); border-radius: 3px; padding: 0.3rem 0.7rem; font-size: 0.8rem; }
+  .schedule b { color: var(--blue); }
+  .contract { background: var(--gray-10); border-left: 4px solid var(--blue); padding: 0.75rem 1rem; margin: 0.75rem 0; }
+  .contract ul { margin: 0.35rem 0 0; padding-left: 1.2rem; }
+  .protect { background: var(--amber-bg); border-left: 4px solid var(--amber); padding: 0.75rem 1rem; margin: 0.75rem 0; }
+  .cmd, .prompt { margin: 0.9rem 0; }
+  .cmd-head, .prompt-head { display: flex; justify-content: space-between; align-items: center; background: var(--code-bg); color: var(--gray-20); font-size: 0.75rem; padding: 0.35rem 0.75rem; border-radius: 3px 3px 0 0; font-family: var(--mono); }
+  pre { margin: 0; background: var(--code-bg); color: #f4f4f4; padding: 0.9rem 1rem; border-radius: 0 0 3px 3px; overflow-x: auto; font-family: var(--mono); font-size: 0.85rem; line-height: 1.5; }
+  .copy-btn { background: var(--blue); color: #fff; border: none; border-radius: 3px; padding: 0.3rem 0.8rem; font-size: 0.75rem; cursor: pointer; font-family: var(--font); }
+  .copy-btn:hover { background: var(--blue-hover); }
+  .copy-btn:focus, button:focus, input:focus, summary:focus { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .expect { font-size: 0.88rem; color: var(--gray-70); margin: 0.4rem 0 0; }
+  .expect b { color: var(--red); }
+  .expect.ok b { color: var(--green); }
+  details { border: 1px solid var(--gray-20); border-radius: 3px; background: #fff; margin: 0.6rem 0; }
+  summary { cursor: pointer; padding: 0.6rem 1rem; font-weight: 600; }
+  details > div { padding: 0 1rem 0.9rem; }
+  .gate label { display: block; font-weight: 600; margin-bottom: 0.35rem; }
+  .gate-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .gate-row input { flex: 1 1 14rem; font-family: var(--mono); font-size: 0.95rem; padding: 0.5rem 0.7rem; border: 1px solid var(--gray-20); border-radius: 3px; }
+  .gate-row button { background: var(--blue); color: #fff; border: none; border-radius: 3px; padding: 0.5rem 1.4rem; font-size: 0.95rem; cursor: pointer; }
+  .gate-row button:hover { background: var(--blue-hover); }
+  .gate-msg { margin: 0.6rem 0 0; font-size: 0.9rem; min-height: 1.2rem; }
+  .gate-msg.error { color: var(--red); }
+  .gate-msg.ok { color: var(--green); }
+  .gate-msg.warn { color: var(--amber); }
+  .banner { margin-top: 0.9rem; background: var(--green-bg); border: 1px solid var(--green); border-radius: 4px; padding: 1rem; }
+  .banner h3 { margin: 0 0 0.35rem; color: var(--green); font-size: 1.05rem; }
+  .banner p { margin: 0; font-size: 0.92rem; }
+  footer { text-align: center; color: var(--gray-70); font-size: 0.8rem; padding: 1.5rem 1rem 2.5rem; }
+  @media (max-width: 40rem) { header { flex-direction: column; align-items: flex-start; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>KKP × IBM Bob — Configuration Incident</h1>
+    <p class="sub">60-minute developer mission · IBM Bob Base only · everything you need is on this page</p>
+  </div>
+  <div class="clock" id="clock" title="Mission clock (elapsed)">00:00</div>
+</header>
+
+<main>
+
+  <section class="card" id="briefing">
+    <h2>Mission briefing</h2>
+    <p><strong>The story.</strong> The <code>v2.3.0</code> platform deploy didn't just touch application
+    code — it "standardized" the IBM Bob configuration on every developer machine. Since this
+    morning, Bob's answers in the Merchant Help Center workspace have been unreliable: files it
+    cannot see, policies it quotes from memory, standards that contradict the code.</p>
+    <p>The platform team kept a <strong>last known-good snapshot</strong> of the pre-deploy
+    configuration — it is in <code>lab/backups/</code>. You are the engineer on call.
+    Five configuration defects stand between Bob and reliability. Restore them, collect one
+    letter per challenge, and together the letters spell the <strong>winning word</strong>
+    that completes the mission.</p>
+    <div class="contract">
+      <strong>What "restored" means</strong> (the verification script encodes exactly this):
+      <ul>
+        <li>A challenge is solved when its live configuration file is <strong>byte-identical to the
+            matching file in <code>lab/backups/</code></strong> — copy the backup over the live file.</li>
+        <li>Each backup file belongs at exactly one live location. The official IBM Bob
+            configuration docs describe where every kind of file lives.</li>
+        <li>Deleting or hand-rewriting a poisoned file is <strong>not</strong> a restore.</li>
+      </ul>
+    </div>
+    <div class="protect">
+      <strong>Rules of engagement.</strong> You may change only the five live configuration
+      locations the challenges point at, and only by restoring from <code>lab/backups/</code>.
+      Protected (do not edit): <code>lab/verify.mjs</code>, <code>lab/backups/</code>,
+      <code>lab/docs/</code>, <code>lab/src/</code>, <code>lab/README.md</code>, <code>lab/AGENTS.md</code>.
+      Deliverables: five green challenges and the winning word.
+    </div>
+    <div class="schedule">
+      <span><b>0–8</b> setup</span><span><b>8–18</b> investigate</span><span><b>18–43</b> restore</span><span><b>43–53</b> verify &amp; win</span><span><b>53–60</b> debrief</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="stepnum">1</span>Set up and reproduce (0–8 min)</h2>
+    <p>Open a terminal in this folder (the one containing <code>index.html</code> and <code>lab/</code>),
+    and open this same folder as the workspace in IBM Bob.</p>
+    <div class="cmd">
+      <div class="cmd-head"><span>terminal</span><button class="copy-btn" data-copy="cmd-setup" type="button">Copy</button></div>
+      <pre><code id="cmd-setup">node --version   # needs v20 or newer (only for the verify script)
+cd lab
+npm run verify</code></pre>
+    </div>
+    <p class="expect"><b>Expected: 0 of 5 challenges passed</b> (exit code 1). That is the incident.</p>
+    <p>Then let Bob try to help you investigate — paste this into <strong>Ask</strong> mode:</p>
+    <div class="prompt">
+      <div class="prompt-head"><span>IBM Bob · Ask mode</span><button class="copy-btn" data-copy="prompt-investigate" type="button">Copy prompt</button></div>
+      <pre><code id="prompt-investigate">List the .bob configuration files in this workspace and explain what each one does.
+Which of them could make your answers unreliable?</code></pre>
+    </div>
+    <p class="expect">If Bob <b>cannot read files at all</b>, that is not a failure of the prompt —
+    it is your first symptom. Start with Challenge 1.</p>
+    <p>The five challenges below are ordered as a <strong>diagnostic cascade</strong>: with all five
+    defects live, Challenge 1's symptom dominates, and each restore reveals the next symptom.
+    You may tackle them in any order.</p>
+  </section>
+
+  <section class="card">
+    <h2><span class="stepnum">1</span>Challenge 1 — The muted mode</h2>
+    <p><strong>Symptom.</strong> Ask Bob to read any project file. Bob cannot — not just one file,
+    <em>any</em> file. Something has redefined what Ask mode can do.</p>
+    <div class="prompt">
+      <div class="prompt-head"><span>IBM Bob · Ask mode</span><button class="copy-btn" data-copy="probe-1" type="button">Copy prompt</button></div>
+      <pre><code id="probe-1">Read src/payout.js and explain what toSatang does.</code></pre>
+    </div>
+    <p class="expect">Docs: <a href="https://bob.ibm.com/docs/ide/configuration/custom-modes">Custom modes</a> (opens online).</p>
+    <details>
+      <summary>Hint 1 — a nudge</summary>
+      <div><p>Modes are defined in YAML — globally and per project. What does the project-level
+      file say about the <code>ask</code> mode? And what happens to a mode whose definition
+      lists no tool groups?</p></div>
+    </details>
+    <details>
+      <summary>Hint 2 — the restore (last resort)</summary>
+      <div><p><code>.bob/custom_modes.yaml</code> overrides the built-in Ask mode, and its
+      <code>ask</code> entry has no <code>groups</code> — a mode without groups gets no tools.
+      Restore it, then start a fresh Bob session and re-probe:<br>
+      <code>cp backups/custom_modes.yaml .bob/custom_modes.yaml</code></p></div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2><span class="stepnum">2</span>Challenge 2 — The missing file</h2>
+    <p><strong>Symptom.</strong> <code>docs/payout-schedule.md</code> exists — you can open it
+    yourself — but Bob cannot read it, while other files in <code>docs/</code> are fine.
+    Look for a lock symbol in file listings.</p>
+    <div class="prompt">
+      <div class="prompt-head"><span>IBM Bob · Ask mode</span><button class="copy-btn" data-copy="probe-2" type="button">Copy prompt</button></div>
+      <pre><code id="probe-2">Summarize docs/payout-schedule.md.</code></pre>
+    </div>
+    <p class="expect">Docs: <a href="https://bob.ibm.com/docs/ide/configuration/bobignore">Ignoring files</a> (opens online).</p>
+    <details>
+      <summary>Hint 1 — a nudge</summary>
+      <div><p>One file specifically blocked while others work: what controls which files Bob
+      may access? And can Bob fix that control itself?</p></div>
+    </details>
+    <details>
+      <summary>Hint 2 — the restore (last resort)</summary>
+      <div><p>The workspace-root <code>.bobignore</code> lists <code>docs/payout-schedule.md</code>.
+      Bob cannot edit <code>.bobignore</code> — it is implicitly ignored — so you must restore it:<br>
+      <code>cp backups/bobignore-official.txt .bobignore</code></p></div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2><span class="stepnum">3</span>Challenge 3 — The confident liar</h2>
+    <p><strong>Symptom.</strong> Ask about the refund deadline. Bob answers <em>7 days</em> —
+    confidently, citing nothing. The policy file says 30. Ask mode can read files now,
+    so why doesn't it?</p>
+    <div class="prompt">
+      <div class="prompt-head"><span>IBM Bob · Ask mode</span><button class="copy-btn" data-copy="probe-3" type="button">Copy prompt</button></div>
+      <pre><code id="probe-3">What is the refund deadline for digital goods? Cite the file you used.</code></pre>
+    </div>
+    <p class="expect">Docs: <a href="https://bob.ibm.com/docs/ide/configuration/rules">Custom rules</a> (opens online).</p>
+    <details>
+      <summary>Hint 1 — a nudge</summary>
+      <div><p>Rules can target a single mode. Where do Ask-mode-specific rules live, and what
+      does the one in this workspace tell Ask to do?</p></div>
+    </details>
+    <details>
+      <summary>Hint 2 — the restore (last resort)</summary>
+      <div><p><code>.bob/rules-ask/01-answer-policy.md</code> instructs Ask to answer from memory
+      and never read <code>docs/</code>. Restore it:<br>
+      <code>cp backups/rules-ask-01-answer-policy.md .bob/rules-ask/01-answer-policy.md</code></p></div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2><span class="stepnum">4</span>Challenge 4 — The wrong standard</h2>
+    <p><strong>Symptom.</strong> Ask how to handle money in new payout code. Bob recommends
+    floating-point baht — the opposite of this project's standard. Check
+    <code>src/payout.js</code> and <code>AGENTS.md</code> for the truth.</p>
+    <div class="prompt">
+      <div class="prompt-head"><span>IBM Bob · Ask mode</span><button class="copy-btn" data-copy="probe-4" type="button">Copy prompt</button></div>
+      <pre><code id="probe-4">How should I handle money in new payout code for this project?</code></pre>
+    </div>
+    <p class="expect">Docs: <a href="https://bob.ibm.com/docs/ide/configuration/rules">Custom rules</a> — general rules section (opens online).</p>
+    <details>
+      <summary>Hint 1 — a nudge</summary>
+      <div><p>Some rules apply to all modes, in every session. Which file under
+      <code>.bob/rules/</code> contradicts the project's actual convention?</p></div>
+    </details>
+    <details>
+      <summary>Hint 2 — the restore (last resort)</summary>
+      <div><p><code>.bob/rules/coding-style.md</code> declares floating-point baht the project
+      standard. Restore it:<br>
+      <code>cp backups/rules-coding-style.md .bob/rules/coding-style.md</code></p></div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2><span class="stepnum">5</span>Challenge 5 — The invisible whisper</h2>
+    <p><strong>Symptom.</strong> Ask about the payout schedule. Bob reads the right file but keeps
+    citing a "PROJECT NOTE" that contradicts it — cutoff 16:00 ICT, weekly payouts — while the
+    docs say 17:00 and daily. Nothing in <code>docs/</code> mentions such a note.
+    Where is it coming from?</p>
+    <div class="prompt">
+      <div class="prompt-head"><span>IBM Bob · Ask mode</span><button class="copy-btn" data-copy="probe-5" type="button">Copy prompt</button></div>
+      <pre><code id="probe-5">When is the settlement cutoff and how often are payouts made? Cite your sources.</code></pre>
+    </div>
+    <p class="expect">Docs: <a href="https://bob.ibm.com/docs/ide/configuration/lifecycle-hooks">Lifecycle hooks</a> (opens online).</p>
+    <details>
+      <summary>Hint 1 — a nudge</summary>
+      <div><p>Something may inject text into Bob's context on every prompt — not via rules,
+      not via modes. What can run automatically at prompt time, and where is it configured?</p></div>
+    </details>
+    <details>
+      <summary>Hint 2 — the restore (last resort)</summary>
+      <div><p><code>.bob/settings.json</code> defines a <code>UserPromptSubmit</code> hook whose
+      output is injected as context into every prompt. Restore it and start a fresh Bob session:<br>
+      <code>cp backups/settings.json .bob/settings.json</code></p></div>
+    </details>
+  </section>
+
+  <section class="card" id="verify">
+    <h2><span class="stepnum">6</span>Verify, collect your letters, and win (43–53 min)</h2>
+    <p>Each restored challenge reveals one letter. Check your progress after every restore:</p>
+    <div class="cmd">
+      <div class="cmd-head"><span>terminal</span><button class="copy-btn" data-copy="cmd-verify" type="button">Copy</button></div>
+      <pre><code id="cmd-verify">npm run verify   # each restored challenge reveals a letter</code></pre>
+    </div>
+    <p class="expect ok">When all five challenges pass, <b>your five letters spell the winning word</b>.
+    Enter it below to complete the mission.</p>
+    <div class="gate">
+      <label for="word-input">Winning word</label>
+      <div class="gate-row">
+        <input id="word-input" type="text" placeholder="the word your letters spell" autocomplete="off" spellcheck="false">
+        <button id="word-btn" type="button">Verify</button>
+      </div>
+      <p class="gate-msg" id="gate-msg" aria-live="polite"></p>
+      <div class="banner" id="gate-banner" hidden>
+        <h3>Mission accomplished — trust in Bob restored</h3>
+        <p>Every configuration defect is repaired: the mode has its tools back, no file is hidden,
+        the rules tell the truth, and nothing whispers in Bob's context. Keep your terminal
+        history ready — the facilitator will review it in the debrief.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="stepnum">7</span>Debrief (53–60 min)</h2>
+    <ul>
+      <li>Configuration is context: Bob's reliability is a function of its configuration, not just
+          the model. Five wrong lines made every answer suspect.</li>
+      <li>Where config lives: <code>.bob/rules/</code> (all modes) vs <code>.bob/rules-{mode}/</code>
+          (one mode) vs <code>AGENTS.md</code> (auto-loaded) vs <code>.bob/custom_modes.yaml</code>
+          (mode definitions — they can override the built-in modes) vs <code>.bobignore</code>
+          (access) vs <code>.bob/settings.json</code> (hooks).</li>
+      <li>A mode with no tool groups has no tools. When a mode "can't" do something, check its
+          definition before blaming the model.</li>
+      <li><code>.bobignore</code> is human-in-the-loop by design: Bob cannot edit it, so access
+          rules are the operator's responsibility.</li>
+      <li>Hooks inject context: when answers look systematically biased, audit
+          <code>.bob/settings.json</code> — Bob may be being lied to behind its back.</li>
+      <li>Not every config file was a bug: <code>AGENTS.md</code> was healthy all along.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  KKP × IBM Bob Workshop · Unofficial learning lab with synthetic data — not a real KKP incident ·
+  Symptom descriptions reflect documented IBM Bob behavior; verify against the official docs ·
+  Completing this page is a learning checkpoint, not a certification.
+</footer>
+
+<script>
+  // Mission clock (elapsed since page open; turns red at 60:00).
+  (function () {
+    var start = Date.now();
+    var el = document.getElementById('clock');
+    setInterval(function () {
+      var s = Math.floor((Date.now() - start) / 1000);
+      var mm = String(Math.floor(s / 60)).padStart(2, '0');
+      var ss = String(s % 60).padStart(2, '0');
+      el.textContent = mm + ':' + ss;
+      if (s >= 3600) el.classList.add('over');
+    }, 1000);
+  })();
+
+  // Copy buttons.
+  (function () {
+    function flash(btn) {
+      var old = btn.textContent;
+      btn.textContent = 'Copied ✓';
+      setTimeout(function () { btn.textContent = old; }, 1500);
+    }
+    document.querySelectorAll('.copy-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var text = document.getElementById(btn.dataset.copy).innerText;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function () { flash(btn); });
+        } else {
+          var ta = document.createElement('textarea');
+          ta.value = text; document.body.appendChild(ta); ta.select();
+          document.execCommand('copy'); ta.remove(); flash(btn);
+        }
+      });
+    });
+  })();
+
+  // Winning-word gate: SHA-256 digest of the correct word (Web Crypto works on file://).
+  var EXPECTED_SHA256 = 'c7651f4560224a0021c9a2f79ca151e021164d37f3fdeeda2be8825e30e13289';
+  document.getElementById('word-btn').addEventListener('click', function () {
+    var input = document.getElementById('word-input').value.trim();
+    var msg = document.getElementById('gate-msg');
+    var banner = document.getElementById('gate-banner');
+    msg.className = 'gate-msg'; msg.textContent = ''; banner.hidden = true;
+    if (!input) {
+      msg.textContent = 'Enter the winning word from npm run verify.';
+      msg.classList.add('error'); return;
+    }
+    if (!(window.crypto && window.crypto.subtle)) {
+      msg.textContent = 'This browser blocked local verification — show your green npm run verify output to the facilitator.';
+      msg.classList.add('warn'); return;
+    }
+    window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(input)).then(function (buf) {
+      var digest = Array.from(new Uint8Array(buf)).map(function (b) {
+        return b.toString(16).padStart(2, '0');
+      }).join('');
+      if (digest === EXPECTED_SHA256) {
+        banner.hidden = false;
+        msg.textContent = 'Winning word accepted.';
+        msg.classList.add('ok');
+      } else {
+        msg.textContent = 'Not the winning word yet. Earn all five letters with npm run verify, then enter the word they spell.';
+        msg.classList.add('error');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
