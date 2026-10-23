@@ -1,4 +1,4 @@
-# Facilitator Run Sheet — KKP x IBM Bob Settlement Desk (60 minutes)
+# Facilitator Run Sheet — KKP x IBM Bob Double Incident (60 minutes)
 
 Private. Never distribute. The participant pack is `index.html` + `lab/` only.
 
@@ -6,79 +6,111 @@ Private. Never distribute. The participant pack is `index.html` + `lab/` only.
 - [ ] Participants have Node.js >= 20 (`node --version`) and IBM Bob Base signed in
     (Bob inference needs their service connection; the guide/lab itself is offline).
 - [ ] Participants have the extracted participant pack (folder containing `index.html` and `lab/`).
-- [ ] That folder is open as the workspace in IBM Bob.
+- [ ] **The `lab/` folder is open as the workspace in IBM Bob** — Bob's `.bob` configuration
+    lives at the workspace root, so opening the pack root instead silently skips every poison.
+- [ ] **PILOT-TEST WITH LIVE BOB BEFORE THE SESSION.** The five configuration poisons are
+    grounded in documented behavior (links in the defect matrix), but the exact misleading
+    answers Bob produces were not verified in this build — confirm each Part 1 symptom
+    manifests on your Bob version and adjust wording if needed.
 - [ ] This facilitator folder is NOT inside what you distributed.
 
 ## Schedule
 | Minutes | Phase | Participant action |
 |---|---|---|
-| 0–8 | Setup & reproduce | Open `index.html`; `cd lab && npm test` (5 red); `npm start` (wrong payouts) |
-| 8–23 | Investigate (Bob Ask) | Copy Ask prompt; hypotheses vs evidence; open questions |
-| 23–43 | Repair (Bob Agent) | Copy Agent prompt; review diff; approve; iterate until green |
-| 43–53 | Verify & win | `npm test` 5/5 green; `npm run verify` -> one letter per challenge; enter the word |
-| 53–60 | Debrief | Discussion points below |
+| 0–8 | Setup & reproduce | Open `index.html`; open `lab/` as the Bob workspace; `cd lab && npm test` (5 red); `npm run verify` (0 of 8); Bob self-check prompt |
+| 8–20 | Part 1 — Restore Bob | Match symptoms to config surfaces; restore byte-exact from `backups/` |
+| 20–28 | Part 2 — Investigate (Bob Ask) | `npm start`; Ask prompt; hypotheses vs evidence |
+| 28–48 | Part 2 — Repair (Bob Agent) | Copy Agent prompt; review diff; approve; iterate until green |
+| 48–56 | Verify & win | `npm run verify` -> one letter per challenge; enter both words |
+| 56–60 | Debrief | Discussion points below |
 
-## The winning word (facilitator only)
-Each challenge's letter is derived from the merchant's correct satang total:
-`String.fromCharCode(65 + (total % 26))`.
+Pacing note: 8 challenges in 60 minutes is deliberately tight. If the audience is mixed,
+extend Part 2's repair window first; the Part 1 restores are quick once diagnosed.
 
-- Challenge 1 — Idempotency (SYN-A1 = 400051): **P**
-- Challenge 2 — Business day (SYN-A2 = 300040): **A**
-- Challenge 3 — Exact satang (SYN-B1 = 466672): **Y**
+## The winning words (facilitator only)
+Part 1 letters derive from the salted SHA-256 digest of each restored file's bytes;
+Part 2 letters derive from the merchant's correct satang total.
 
-**Word: PAY.** Quick verification: ask the participant for the word.
-The word is thematically guessable ("the desk pays again") — treat it as a progress
-marker. The real proof of completion is the green test run and the reviewed diff.
+| Part | Word | Letters from |
+|---|---|---|
+| 1 — Restore Bob | **TRUST** | T (custom_modes) · R (.bobignore) · U (rules-ask) · S (rules) · T (hooks) |
+| 2 — Fix the Settlement Desk | **PAY** | P (SYN-A1 = 400051) · A (SYN-A2 = 300040) · Y (SYN-B1 = 466672) |
 
-## The three defects (do not reveal before debrief)
-All three were introduced by the fictional v2.3.0 "simplification" deploy:
+Quick verification: ask the participant for both words. Both words are thematically
+guessable — treat them as progress markers. The real proof is the green `npm run verify`
+run and the participant's ability to EXPLAIN each poison and defect at debrief.
 
-| # | Defect in `lab/server.mjs` | Symptom | Fixed by |
+## The eight defects (do not reveal before debrief)
+One fictional v2.3.0 deploy caused everything: it rewrote the payout loop AND
+"standardized" the `.bob` configuration.
+
+### Part 1 — configuration poisons (each exploits documented IBM Bob behavior)
+| # | Live path | Poison | Documented mechanism | Symptom prompt |
+|---|---|---|---|---|
+| 1 | `.bob/custom_modes.yaml` | Project override of `ask` with a "policy oracle" role and **no `groups`** | Custom modes: project overrides beat defaults; omitted groups = no tools | "Read src/payout.js and explain what toSatang does." |
+| 2 | `.bobignore` | Extra pattern `docs/payout-schedule.md` | Ignoring files: reads blocked, 🔒 marker, implicitly ignored by Bob itself | "Summarize docs/payout-schedule.md." |
+| 3 | `.bob/rules-ask/01-answer-policy.md` | Answer from memory, never read docs, "refund is 7 days" | Custom rules: `.bob/rules-{mode}/` loads for that mode | "What is the refund deadline for digital goods?" |
+| 4 | `.bob/rules/coding-style.md` | "Money is floating-point baht; satang deprecated" | Custom rules: `.bob/rules/` applies to all modes | "How should I handle money in new payout code?" |
+| 5 | `.bob/settings.json` | `UserPromptSubmit` hook echoing a fake PROJECT NOTE (16:00 ICT, weekly) | Lifecycle hooks: stdout injected as context on every prompt | "When is the settlement cutoff and how often are payouts made?" |
+
+Red herrings (NOT defects): `AGENTS.md` (healthy, auto-loaded by design) and `backups/`
+(the recovery source). TXN-010 ("0.00") is the Part 2 equivalent.
+
+### Part 2 — code defects in `lab/server.mjs`
+| # | Defect | Symptom | Fixed by |
 |---|---|---|---|
-| 1 | No idempotency: the loop never remembers seen transaction ids | SYN-A1 paid twice for redelivered TXN-001 (550051 vs 400051 satang) | Track ids in a `Set`; skip repeats (first occurrence wins) |
-| 2 | No business-day window: timestamps are never checked | SYN-A2 paid for TXN-005 (01:05 ICT 23 Oct) and TXN-006 (16:00 ICT 21 Oct) | Filter to [2026-10-21T17:00:00.000Z, 2026-10-22T17:00:00.000Z) |
-| 3 | Float money: baht parsed as decimal floats, summed, then `Math.floor(sum * 100)` | SYN-B1 paid 466671 instead of 466672 satang | Parse each amount to integer satang at the boundary; accumulate integers |
+| 6 | No idempotency: seen ids never remembered | SYN-A1 paid twice for redelivered TXN-001 (550051 vs 400051) | Track ids in a `Set`; first occurrence wins |
+| 7 | No business-day window: timestamps unchecked | SYN-A2 paid for TXN-005 (01:05 ICT 23 Oct) and TXN-006 (16:00 ICT 21 Oct) | Filter to [2026-10-21T17:00:00.000Z, 2026-10-22T17:00:00.000Z) |
+| 8 | Float money: parse to floats, sum, `Math.floor` | SYN-B1 paid 466671 instead of 466672 satang | Parse to integer satang at the boundary; accumulate integers |
 
-Unrelated observation (NOT a defect): TXN-010 has amount "0.00" and is correctly skipped
-by both broken and fixed code — good debrief point about symptoms vs causes.
+## Restore commands (Part 1 hint level — last resort)
+```bash
+cp backups/custom_modes.yaml              .bob/custom_modes.yaml
+cp backups/bobignore-official.txt         .bobignore
+cp backups/rules-ask-01-answer-policy.md  .bob/rules-ask/01-answer-policy.md
+cp backups/rules-coding-style.md          .bob/rules/coding-style.md
+cp backups/settings.json                  .bob/settings.json
+```
 
-## Exact expected outputs (verified on Node v25.2.1; re-record yours if fixtures change)
-- Starter `npm start`: `{"merchantTotals":{"SYN-A1":550051,"SYN-A2":500125,"SYN-B1":466671},"processedCount":9}`
+## Exact expected outputs (verified on Node v25.2.1)
 - Starter `npm test`: 5 tests, 0 pass, 5 fail (exit 1)
-- Starter `npm run verify`: 0 of 3 challenges passed, no letters (exit 1)
-- Reference `npm test`: 5 tests, 5 pass, 0 fail (exit 0)
-- Reference `npm start`: `{"merchantTotals":{"SYN-A1":400051,"SYN-A2":300040,"SYN-B1":466672},"processedCount":6}`
-- Reference `npm run verify`: letters P, A, Y — "your three letters, in challenge order, spell the winning word"
-
-## Partial-repair demo (shows no single fix resolves the incident)
-| Repair applied | SYN-A1 | SYN-A2 | SYN-B1 | count | Tests green | Letter |
-|---|---|---|---|---|---|---|
-| none (starter) | 550051 | 500125 | 466671 | 9 | 0/5 | — |
-| dedup only | 400051 | 500125 | 466671 | 8 | 1/5 | P |
-| window only | 550051 | 300040 | 466671 | 7 | 1/5 | A |
-| satang-int only | 550051 | 500125 | 466672 | 9 | 1/5 | Y |
-| all three (reference) | 400051 | 300040 | 466672 | 6 | 5/5 | P A Y |
+- Starter `npm start`: `{"merchantTotals":{"SYN-A1":550051,"SYN-A2":500125,"SYN-B1":466671},"processedCount":9}`
+- Starter `npm run verify`: `0 of 8 challenges passed` (exit 1), no letters
+- Config restored only: `5 of 8 challenges passed` + letters T, R, U, S, T
+- Reference server (copied in): `npm test` 5 pass; `npm run verify` letters T R U S T P A Y
+  and "Your Part 1 letters spell the first winning word; your Part 2 letters spell the second"
+- The cascade: with all five config poisons live, Challenge 1's symptom dominates
+  (Ask mode has no tools). Each restore reveals the next symptom; after Part 1, Bob is
+  reliable for the Part 2 investigation.
 
 ## Integrity notes
-- A participant can defeat the gate by hardcoding the expected totals in `server.mjs`,
-  or by brute-forcing the 3-letter word against the page's digest. Completion = green
-  tests + a reviewed diff (the Agent prompt forbids hardcoding; ask to see the diff
-  during debrief). The word is a learning gate, not proctoring.
-- `verify.mjs` checks the three totals independently of the test files, so weakening
-  or deleting tests does not award letters.
+- Part 1 letters are salted digests — editing `verify.mjs` or `backups/` to self-award
+  requires consistent tampering; both are protected by the rules of engagement. Ask to see
+  the restore commands in terminal history at debrief.
+- Part 2: hardcoding expected totals in `server.mjs` or brute-forcing the short words
+  defeats the gates. Completion = green verify + reviewed diff + explained poisons.
+- Deleting a poisoned file is NOT a restore — verify demands byte-equality with the
+  official snapshot, and the failure message says so.
 
 ## Reset
 - Participant: re-extract the participant ZIP.
-- Facilitator (in repo): `git checkout -- workshop-developer/lab/server.mjs`
+- Facilitator (in repo): `git checkout -- workshop-developer/lab`
+- Facilitator (from this folder): copy `poisoned/` back over `lab/` and restore the
+  broken starter via git:
+  `cp -r facilitator/poisoned/.bob lab/ && cp facilitator/poisoned/.bobignore lab/.bobignore`
 
-## Debrief points (53–60)
-1. Symptom vs root cause: three symptoms, one deploy, three distinct defects —
-   and one odd record (TXN-010) that was never a bug.
-2. Why payments code uses integer minor units: 555.55 + 1555.55 + 2555.62 in IEEE-754
-   floats floors to 466671, not 466672.
-3. Timezones: "22 Oct in Bangkok" is a UTC window [17:00Z, 17:00Z) — half-open bounds matter.
-4. How Bob was used: Ask built hypotheses against evidence; Agent proposed a diff that a
-   human approved. Bob's explanation was never the proof — the executed tests were.
+## Debrief points (56–60)
+1. Two incidents, one deploy: the code was broken AND the assistant was compromised.
+   Fix your tools before trusting their output.
+2. Configuration is context: where each surface lives (`.bob/rules/`, `rules-{mode}/`,
+   `AGENTS.md`, `custom_modes.yaml`, `.bobignore`, `settings.json` hooks).
+3. A mode with no tool groups has no tools; `.bobignore` is human-in-the-loop by design;
+   hook stdout is injected context — audit `settings.json` when answers look biased.
+4. Symptom vs root cause: eight symptoms, one deploy, eight distinct defects — and
+   oddities that were never bugs (TXN-010, AGENTS.md).
+5. Integer satang (555.55 + 1555.55 + 2555.62 floors to 466671) and half-open UTC
+   windows for "22 Oct in Bangkok".
+6. Bob's explanation was never the proof — the executed tests and byte-exact restores were.
 
 ## Distribution
 From `workshop-developer/`:
