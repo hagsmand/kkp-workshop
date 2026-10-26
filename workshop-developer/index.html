@@ -398,6 +398,85 @@ npm run verify   # each repaired challenge reveals a letter</code></pre>
     </ul>
   </section>
 
+  <section class="card" id="bonus-ponytail">
+    <h2>★ Bonus — Ponytail A/B: see what a skill changes (10 min, optional)</h2>
+    <p>The mission is over, Bob is trustworthy, and the Settlement Desk pays correctly. Now put
+    that repaired desk to work: <strong>the same coding task, run twice — once without a skill,
+    once with one — and measure the difference.</strong> The skill is
+    <a href="https://github.com/DietrichGebert/ponytail" rel="noopener">ponytail</a> (MIT):
+    it puts the agent in "lazy senior dev" mode — the smallest change that fully solves the task,
+    no abstraction, options or boilerplate nobody asked for.</p>
+
+    <div class="part">
+      <h2>Setup (2 min)</h2>
+      <p>Everything lives in the <code>bonus/</code> folder next to this guide. It contains the
+      <strong>repaired</strong> Settlement Desk — the exact code you finished in Part 2 — plus a
+      new ticket from Finance in <code>bonus/lab/TASK.md</code>.</p>
+      <div class="cmd">
+        <div class="cmd-head"><span>terminal (from workshop-developer/)</span><button class="copy-btn" data-copy="cmd-bonus-setup" type="button">Copy</button></div>
+        <pre><code id="cmd-bonus-setup">cd kkp-workshop/workshop-developer   # from the folder containing the repo
+cp -r bonus/lab run-a        # run A: no skill
+cp -r bonus/lab run-b        # run B: with ponytail
+mkdir -p run-b/.bob/skills
+cp -r bonus/skills/ponytail run-b/.bob/skills/ponytail</code></pre>
+      </div>
+    </div>
+
+    <div class="part">
+      <h2>Run A — plain Bob (3 min)</h2>
+      <p>Open <code>run-a/</code> in Bob, start a <strong>new session</strong>, and paste the
+      ticket text from <code>TASK.md</code> as-is. When Bob finishes:</p>
+      <ul>
+        <li>write down the session's token usage (Bob shows it per session),</li>
+        <li>run <code>bonus/measure.sh run-a</code> and note lines added, files touched,
+            new dependencies.</li>
+      </ul>
+    </div>
+
+    <div class="part">
+      <h2>Run B — Bob with ponytail (3 min)</h2>
+      <p>Open <code>run-b/</code> in Bob (the skill sits in <code>.bob/skills/</code>), start a
+      <strong>new session</strong> so the skill loads, say <em>"ponytail"</em> once, then paste the
+      same ticket. Record the same numbers, then compare:</p>
+    </div>
+
+    <div class="contract">
+      <p><strong>What we measured running this exact A/B with two identical agents</strong>
+      (facilitator copy has the full log in <code>facilitator/ponytail-expected-results.md</code>):</p>
+      <table style="width:100%; border-collapse:collapse; font-size:0.9rem;">
+        <thead>
+          <tr>
+            <th style="text-align:left; padding:0.4rem 0.6rem; border-bottom:1px solid var(--gray-20);">Metric</th>
+            <th style="text-align:left; padding:0.4rem 0.6rem; border-bottom:1px solid var(--gray-20);">Run A (no skill)</th>
+            <th style="text-align:left; padding:0.4rem 0.6rem; border-bottom:1px solid var(--gray-20);">Run B (ponytail)</th>
+          </tr>
+        </thead>
+        <tbody id="ponytail-ab-table">
+          <tr><td style="padding:0.4rem 0.6rem;">Lines added</td><td style="padding:0.4rem 0.6rem;">229 (105-line tool + 124-line test suite)</td><td style="padding:0.4rem 0.6rem;"><b>73 (−68%)</b> — 44-line tool + 29-line check</td></tr>
+          <tr><td style="padding:0.4rem 0.6rem;">Files touched (new files)</td><td style="padding:0.4rem 0.6rem;">2 (2 new)</td><td style="padding:0.4rem 0.6rem;">2 (2 new)</td></tr>
+          <tr><td style="padding:0.4rem 0.6rem;">New dependencies</td><td style="padding:0.4rem 0.6rem;">0</td><td style="padding:0.4rem 0.6rem;">0</td></tr>
+          <tr><td style="padding:0.4rem 0.6rem;">Tests after the change</td><td style="padding:0.4rem 0.6rem;">11 pass, 0 fail (7 new tests)</td><td style="padding:0.4rem 0.6rem;">6 pass, 0 fail (2 new tests)</td></tr>
+          <tr><td style="padding:0.4rem 0.6rem;">Agent activity volume (transcript minus kickoff prompt)</td><td style="padding:0.4rem 0.6rem;">~11.0 KB</td><td style="padding:0.4rem 0.6rem;"><b>~7.5 KB (−31%)</b>, even after paying the skill's own 3.4 KB in context</td></tr>
+          <tr><td style="padding:0.4rem 0.6rem;">API calls / wall time</td><td style="padding:0.4rem 0.6rem;">12 / 222 s</td><td style="padding:0.4rem 0.6rem;">10 / 211 s</td></tr>
+        </tbody>
+      </table>
+      <p class="expect" id="ab-takeaway" style="margin-top:0.6rem;">Same model, same correct output — both tools flag SYN-A2 (10 baht short) and SYN-C1 (paid but
+      never settled), compare money exactly in satang, and exit 1. Without the skill the agent produced
+      <b>3.1×</b> the code; even counting the skill's own text as a cost, its session churned ~30% less
+      context and made fewer API calls. The ponytail run also ended the way the skill demands: naming
+      what it skipped (a real CSV parser) and the one risk that carries (quoted fields would misparse).
+      Record your own numbers from Bob's session token usage and see how yours compare.</p>
+    </div>
+
+    <p class="expect ok">Debrief question: the ticket looks like a tool — CSV input, matching, reporting, exit
+    codes — and a plain agent often builds one: a CSV parser module, a matching engine, tolerance
+    config, report classes. The whole job fits in <em>one new file</em> of roughly thirty lines that
+    reuses what the desk already has: <code>processSettlements</code> computes the desk side,
+    <code>toSatang</code> keeps money exact, and the "CSV" is two columns split on a comma. A skill
+    does not make the agent smarter; it changes <em>which option the agent reaches for first</em>.
+    Fewer lines means fewer tokens, fewer files to review, and less surface for the next incident.</p>
+  </section>
+
   <section class="card">
     <h2>Stuck on Part 2? Hints</h2>
     <details>

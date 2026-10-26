@@ -1,0 +1,15 @@
+{
+  "name": "ponytail-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Ponytail A/B lab - clean Settlement Desk starter for the with/without-skill comparison",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test test/settlement.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

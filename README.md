@@ -21,9 +21,14 @@ kkp-workshop/
 └── workshop-developer/              ← 💻 Track สำหรับ Developers (60 นาที)
     ├── index.html                   ← คู่มือ Workshop หน้าเดียว (เปิดในเบราว์เซอร์)
     ├── lab/                         ← Settlement Desk lab + .bob config ที่ถูกวางยา
+    ├── bonus/                       ← ★ Bonus: ponytail A/B (lab + skill + measure.sh)
     ├── facilitator/                 ← เฉพาะ facilitator (ห้ามแจกจ่าย)
     └── dist/                        ← participant ZIP ที่สร้างตอนแจกจ่าย
 ```
+
+> **Bonus (optional ~10 นาที):** หลังจบภารกิจหลัก ทำ extension ที่
+> `workshop-developer/bonus/` — A/B วัดผล agent ที่มี/ไม่มี skill `ponytail`
+> ช่วย (ดูส่วน "★ Bonus" ท้าย `workshop-developer/index.html`)
 
 ---
 
@@ -103,7 +108,8 @@ Workspace เดียวที่ deploy v2.3.0 ทำลายสองอย�
 | `pptx` | Business | Marketplace → ค้นหา "pptx" → Install |
 | `office-insights` | Business | Marketplace → ค้นหา "office" → Install |
 | `xlsx` | Business (optional) | Marketplace → ค้นหา "xlsx" → Install |
-| ไม่ต้องติดตั้ง Skills เพิ่ม | Developer | ใช้ core Ask / Plan / Agent; ไม่ใช้ Premium, MCP หรือ trial |
+| `ไม่ต้องติดตั้ง Skills เพิ่ม | Developer | ใช้ core Ask / Plan / Agent; ไม่ใช้ Premium, MCP หรือ trial |
+| `ponytail` | Developer bonus | อยู่ที่ `workshop-developer/bonus/skills/ponytail/` → คัดลอกไป `.bob/skills/` (A/B demo) |
 
 ---
 
