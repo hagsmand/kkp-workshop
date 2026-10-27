@@ -34,6 +34,10 @@
   .crit h3 { margin: 0 0 0.3rem; font-size: 0.98rem; }
   .crit p { margin: 0; font-size: 0.92rem; color: var(--gray-70); }
   .req { background: #edf5ff; border-left: 4px solid var(--blue); padding: 0.75rem 1rem; margin: 0.9rem 0 0.25rem; font-size: 0.95rem; }
+  table.tests { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.92rem; }
+  table.tests th, table.tests td { text-align: left; padding: 0.45rem 0.6rem; border-bottom: 1px solid var(--gray-20); vertical-align: top; }
+  table.tests th { background: var(--gray-10); }
+  table.tests td:first-child { white-space: nowrap; }
   .note { background: var(--amber-bg); border-left: 4px solid var(--amber); padding: 0.75rem 1rem; margin: 0.75rem 0; font-size: 0.92rem; }
   code { font-family: var(--mono); font-size: 0.88em; background: var(--gray-10); padding: 0.05rem 0.3rem; border-radius: 2px; }
   footer { text-align: center; color: var(--gray-70); font-size: 0.8rem; padding: 1.5rem 1rem 2.5rem; }
@@ -140,6 +144,36 @@
     <h3>Combining approaches</h3>
     <p>Start with prompt-driven analysis to understand what you are dealing with. Use spec-driven
     methods for formal planning and sign-off. Return to prompt-driven development for implementation.</p>
+  </section>
+
+  <section class="card" id="eval-tests">
+    <h2>Evaluation tests (.NET, reference only)</h2>
+    <p>The legacy app has no tests. We wrote <strong>12 xUnit tests in VB.NET</strong> that describe how its
+    business logic must behave, so you can check your Python version against them.</p>
+    <div class="note"><strong>These tests cannot be run.</strong> They call a <code>PqRules</code> class that does
+    not exist (the legacy logic is trapped in private form handlers), and they need Windows and .NET. Read them
+    as a specification, then reproduce the same results for the same inputs in Python.</div>
+    <table class="tests">
+      <thead><tr><th>Test</th><th>Rule</th></tr></thead>
+      <tbody>
+        <tr><td><code>T01–T04</code></td><td>Working days remaining: same day is 0, Monday to Friday is 4, Friday to Monday is 1, a passed deadline is −1</td></tr>
+        <tr><td><code>T05</code></td><td>Written PQ: deadline is 7 working days after receipt</td></tr>
+        <tr><td><code>T06</code></td><td>Oral PQ: deadline is 3 working days after receipt, skipping the weekend</td></tr>
+        <tr><td><code>T07</code></td><td>Priority Written PQ: follows the Oral rule (3 days, not 7)</td></tr>
+        <tr><td><code>T08</code></td><td>First reference of the day is <code>PQ-yyyyMMdd-001</code></td></tr>
+        <tr><td><code>T09</code></td><td>Reference counter counts only same-date references, padded to 3 digits</td></tr>
+        <tr><td><code>T10</code></td><td>Search: case-insensitive, trimmed, matches MP name or reference (not question text); blank shows all</td></tr>
+        <tr><td><code>T11</code></td><td>Overdue: deadline before today and status not Answered</td></tr>
+        <tr><td><code>T12</code></td><td>Validation: blank MP name or question is rejected with the exact message, MP name checked first</td></tr>
+      </tbody>
+    </table>
+    <p>Files (open in IBM Bob or any editor):</p>
+    <ul>
+      <li><a href="legacy-tests/PQTracker.Tests/PqRulesTests.vb"><code>PqRulesTests.vb</code></a> — the 12 tests</li>
+      <li><a href="legacy-tests/PQTracker.Tests/PqRulesContract.vb"><code>PqRulesContract.vb</code></a> — the function signatures the tests assume</li>
+      <li><a href="legacy-tests/PQTracker.Tests/PQTracker.Tests.vbproj"><code>PQTracker.Tests.vbproj</code></a> — project file (not buildable)</li>
+    </ul>
+    <p>The legacy quirks are part of the spec: bank holidays are ignored, and a passed deadline returns −1.</p>
   </section>
 
   <section class="card">
