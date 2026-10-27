@@ -38,6 +38,11 @@
   table.tests th, table.tests td { text-align: left; padding: 0.45rem 0.6rem; border-bottom: 1px solid var(--gray-20); vertical-align: top; }
   table.tests th { background: var(--gray-10); }
   table.tests td:first-child { white-space: nowrap; }
+  .cmd { margin: 0.9rem 0; }
+  .cmd-head { background: #21272e; color: var(--gray-20); font-size: 0.75rem; padding: 0.35rem 0.75rem; border-radius: 3px 3px 0 0; font-family: var(--mono); }
+  pre { margin: 0; background: #21272e; color: #f4f4f4; padding: 0.9rem 1rem; border-radius: 0 0 3px 3px; overflow-x: auto; font-family: var(--mono); font-size: 0.85rem; line-height: 1.5; }
+  .expect { font-size: 0.88rem; color: var(--gray-70); margin: 0.4rem 0 0; }
+  .expect b { color: #24a148; }
   .note { background: var(--amber-bg); border-left: 4px solid var(--amber); padding: 0.75rem 1rem; margin: 0.75rem 0; font-size: 0.92rem; }
   code { font-family: var(--mono); font-size: 0.88em; background: var(--gray-10); padding: 0.05rem 0.3rem; border-radius: 2px; }
   footer { text-align: center; color: var(--gray-70); font-size: 0.8rem; padding: 1.5rem 1rem 2.5rem; }
@@ -117,11 +122,50 @@
         <p>Create clear documentation of government-specific rules: PQ deadline calculations, reference number formats, workflow requirements.</p></div>
       <div class="crit"><h3>Build for modern standards</h3>
         <p>Use a contemporary Python framework with proper separation of concerns. The application must work on mobile and desktop, and be compatible with screen readers.</p></div>
-      <div class="crit"><h3>Plan for data migration</h3>
-        <p>Show how existing data would move to your modern storage solution, using Python for any migration script.</p></div>
+      <div class="crit"><h3>Migrate the data (hands-on)</h3>
+        <p>Convert the provided SQLite database into a valid legacy <code>pqdata.csv</code> with a
+        Python script that actually runs. The check script must pass 12 of 12 rows.</p></div>
       <div class="crit"><h3>Handle errors gracefully</h3>
         <p>Include robust input validation and error messages that help users fix problems.</p></div>
     </div>
+  </section>
+
+  <section class="card" id="data-migration">
+    <h2>Hands-on — data migration (required)</h2>
+    <p>The modernised Python service stores its data in SQLite. During the transition the legacy
+    tracker must keep working, so the data has to flow the other way too: produce a
+    <code>pqdata.csv</code> the old VB.NET app can load. A plan is not enough — your converter
+    has to run and pass the check.</p>
+    <p>Files in <code>workshop-challenge/data-migration/</code>:</p>
+    <ul>
+      <li><a href="data-migration/pqtracker.sqlite"><code>pqtracker.sqlite</code></a> — the source
+          database: 12 PQ records in one table (plus a small <code>meta</code> table)</li>
+      <li><a href="data-migration/inspect_db.py"><code>inspect_db.py</code></a> — prints the schema
+          and sample rows</li>
+      <li><a href="data-migration/check_migration.py"><code>check_migration.py</code></a> — verifies
+          your <code>pqdata.csv</code> against the database</li>
+      <li><a href="data-migration/build_db.py"><code>build_db.py</code></a> — rebuilds
+          <code>pqtracker.sqlite</code> if it is missing (the database is generated, not stored in
+          git, because the secret scanner blocks binary SQLite files)</li>
+    </ul>
+    <p>Write a Python converter (with Bob) that produces <code>pqdata.csv</code> in the exact
+    legacy format:</p>
+    <ul>
+      <li>header row: <code>Reference,MPName,QuestionText,PQType,DateReceived,Deadline,AssignedTeam,Status,ResponseText,DateAnswered</code></li>
+      <li>dates as <code>yyyy-mm-dd</code> — the legacy <code>Date.Parse</code> accepts them</li>
+      <li>an unanswered PQ ends with an empty last field</li>
+      <li>no commas inside any field — the legacy loader splits on every comma</li>
+    </ul>
+    <div class="cmd">
+      <div class="cmd-head"><span>terminal</span></div>
+      <pre><code>cd workshop-challenge/data-migration
+python3 inspect_db.py        # see the schema and sample rows
+# write your converter (e.g. migrate.py) so it produces pqdata.csv, then:
+python3 check_migration.py</code></pre>
+    </div>
+    <p class="expect">Pass line: <b>Migration check passed: 12 of 12 rows match.</b></p>
+    <p>One record has a status the legacy edit form never offered. Migrate it unchanged — the
+    check compares against the database, not against the dropdown lists.</p>
   </section>
 
   <section class="card">

@@ -1,3 +1,4 @@
 .DS_Store
 .hermes/
 .vscode
+workshop-challenge/data-migration/pqtracker.sqlite
