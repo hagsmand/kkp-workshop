@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    EVALUATION SPEC ONLY - THIS PROJECT IS NOT MEANT TO BUILD OR RUN.
+    It references a class library (PQTracker.Core, type PqRules) that does not exist:
+    in the legacy app this logic is trapped in private Form1/Form2 event handlers.
+    The tests describe what the extracted logic must do. Package versions were not restored.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>PQTracker.Tests</RootNamespace>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Does not exist. A real modernised solution would supply the equivalent. -->
+    <ProjectReference Include="..\PQTracker.Core\PQTracker.Core.vbproj" />
+  </ItemGroup>
+
+</Project>

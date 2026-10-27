@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "9/Em14upd2M=",
+  "success": true,
+  "projectFilePath": "/Users/stevewalton/Development/ClaudeCodeProjects/ai-sdlc-app-mod/PQTracker.vbproj",
+  "expectedPackageFiles": [
+    "/Users/stevewalton/.nuget/packages/microsoft.windowsdesktop.app.ref/9.0.4/microsoft.windowsdesktop.app.ref.9.0.4.nupkg.sha512"
+  ],
+  "logs": []
+}

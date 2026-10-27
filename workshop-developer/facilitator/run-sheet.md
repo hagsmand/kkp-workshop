@@ -21,24 +21,21 @@ Private. Never distribute. The participant pack is `index.html` + `lab/` only.
 | 8–20 | Part 1 — Restore Bob | Match symptoms to config surfaces; restore byte-exact from `backups/` |
 | 20–28 | Part 2 — Investigate (Bob Ask) | `npm start`; Ask prompt; hypotheses vs evidence |
 | 28–48 | Part 2 — Repair (Bob Agent) | Copy Agent prompt; review diff; approve; iterate until green |
-| 48–56 | Verify & win | `npm run verify` -> one letter per challenge; enter both words |
-| 56–60 | Debrief | Discussion points below |
+| 48–60 | Debrief | `npm run verify` 8/8 green; review terminal history + diff; discuss poisons |
 
 Pacing note: 8 challenges in 60 minutes is deliberately tight. If the audience is mixed,
 extend Part 2's repair window first; the Part 1 restores are quick once diagnosed.
 
-## The winning words (facilitator only)
-Part 1 letters derive from the salted SHA-256 digest of each restored file's bytes;
-Part 2 letters derive from the merchant's correct satang total.
-
-| Part | Word | Letters from |
-|---|---|---|
-| 1 — Restore Bob | **TRUST** | T (custom_modes) · R (.bobignore) · U (rules-ask) · S (rules) · T (hooks) |
-| 2 — Fix the Settlement Desk | **PAY** | P (SYN-A1 = 400051) · A (SYN-A2 = 300040) · Y (SYN-B1 = 466672) |
-
-Quick verification: ask the participant for both words. Both words are thematically
-guessable — treat them as progress markers. The real proof is the green `npm run verify`
-run and the participant's ability to EXPLAIN each poison and defect at debrief.
+## Progress letters (facilitator only)
+The page no longer collects winning words (section 8 was removed) — the mission's
+finish line is `npm run verify` reporting 8/8. `verify.mjs` still prints one
+tamper-evident letter per solved challenge: Part 1 letters derive from the salted
+SHA-256 digest of each restored file's bytes; Part 2 letters derive from the
+merchant's correct satang total. For reference they spell **TRUST** (T custom_modes ·
+R .bobignore · U rules-ask · S rules · T hooks) and **PAY** (P 400051 · A 300040 ·
+Y 466672) — useful as a quick progress read if you walk the room, but nothing is
+entered anywhere. The real proof is the green `npm run verify` run and the
+participant's ability to EXPLAIN each poison and defect at debrief.
 
 ## The eight defects (do not reveal before debrief)
 One fictional v2.3.0 deploy caused everything: it rewrote the payout loop AND
@@ -78,7 +75,7 @@ cp backups/settings.json                  .bob/settings.json
 - Starter `npm run verify`: `0 of 8 challenges passed` (exit 1), no letters
 - Config restored only: `5 of 8 challenges passed` + letters T, R, U, S, T
 - Reference server (copied in): `npm test` 5 pass; `npm run verify` letters T R U S T P A Y
-  and "Your Part 1 letters spell the first winning word; your Part 2 letters spell the second"
+  and "All challenges passed. Mission complete — Bob is trustworthy again"
 - The cascade: with all five config poisons live, Challenge 1's symptom dominates
   (Ask mode has no tools). Each restore reveals the next symptom; after Part 1, Bob is
   reliable for the Part 2 investigation.
@@ -87,8 +84,7 @@ cp backups/settings.json                  .bob/settings.json
 - Part 1 letters are salted digests — editing `verify.mjs` or `backups/` to self-award
   requires consistent tampering; both are protected by the rules of engagement. Ask to see
   the restore commands in terminal history at debrief.
-- Part 2: hardcoding expected totals in `server.mjs` or brute-forcing the short words
-  defeats the gates. Completion = green verify + reviewed diff + explained poisons.
+- Part 2: hardcoding expected totals in `server.mjs` defeats the letters. Completion = green verify + reviewed diff + explained poisons.
 - Deleting a poisoned file is NOT a restore — verify demands byte-equality with the
   official snapshot, and the failure message says so.
 

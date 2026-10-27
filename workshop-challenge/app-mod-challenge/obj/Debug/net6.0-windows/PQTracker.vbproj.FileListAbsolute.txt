@@ -1,0 +1,17 @@
+/Users/stevewalton/Development/ClaudeCodeProjects/ai-sdlc-app-mod/obj/Debug/net6.0-windows/PQTracker.Form1.resources
+/Users/stevewalton/Development/ClaudeCodeProjects/ai-sdlc-app-mod/obj/Debug/net6.0-windows/PQTracker.Form2.resources
+/Users/stevewalton/Development/ClaudeCodeProjects/ai-sdlc-app-mod/obj/Debug/net6.0-windows/PQTracker.Resources.resources
+/Users/stevewalton/Development/ClaudeCodeProjects/ai-sdlc-app-mod/obj/Debug/net6.0-windows/PQTracker.vbproj.GenerateResource.cache
+/Users/stevewalton/Development/ClaudeCodeProjects/ai-sdlc-app-mod/obj/Debug/net6.0-windows/PQTracker.GeneratedMSBuildEditorConfig.editorconfig
+/Users/stevewalton/Development/ClaudeCodeProjects/ai-sdlc-app-mod/obj/Debug/net6.0-windows/PQTracker.vbproj.CoreCompileInputs.cache
+/Users/stevewalton/Development/ClaudeCodeProjects/ai-sdlc-app-mod/bin/Debug/net6.0-windows/PQTracker
+/Users/stevewalton/Development/ClaudeCodeProjects/ai-sdlc-app-mod/bin/Debug/net6.0-windows/PQTracker.dll.config
+/Users/stevewalton/Development/ClaudeCodeProjects/ai-sdlc-app-mod/bin/Debug/net6.0-windows/PQTracker.deps.json
+/Users/stevewalton/Development/ClaudeCodeProjects/ai-sdlc-app-mod/bin/Debug/net6.0-windows/PQTracker.runtimeconfig.json
+/Users/stevewalton/Development/ClaudeCodeProjects/ai-sdlc-app-mod/bin/Debug/net6.0-windows/PQTracker.dll
+/Users/stevewalton/Development/ClaudeCodeProjects/ai-sdlc-app-mod/bin/Debug/net6.0-windows/PQTracker.pdb
+/Users/stevewalton/Development/ClaudeCodeProjects/ai-sdlc-app-mod/obj/Debug/net6.0-windows/PQTracker.dll
+/Users/stevewalton/Development/ClaudeCodeProjects/ai-sdlc-app-mod/obj/Debug/net6.0-windows/refint/PQTracker.dll
+/Users/stevewalton/Development/ClaudeCodeProjects/ai-sdlc-app-mod/obj/Debug/net6.0-windows/PQTracker.pdb
+/Users/stevewalton/Development/ClaudeCodeProjects/ai-sdlc-app-mod/obj/Debug/net6.0-windows/PQTracker.genruntimeconfig.cache
+/Users/stevewalton/Development/ClaudeCodeProjects/ai-sdlc-app-mod/obj/Debug/net6.0-windows/ref/PQTracker.dll

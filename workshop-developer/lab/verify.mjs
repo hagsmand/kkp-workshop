@@ -66,9 +66,8 @@ for (const challenge of settlementChallenges) {
 const total = configChallenges.length + settlementChallenges.length;
 console.log('');
 if (passed === total) {
-  console.log('All challenges passed. Your Part 1 letters spell the first winning word;');
-  console.log('your Part 2 letters spell the second. Enter both on the workshop page');
-  console.log('to complete the mission.');
+  console.log('All challenges passed. Mission complete — Bob is trustworthy again');
+  console.log('and the Settlement Desk pays correctly.');
 } else {
   console.log(`${passed} of ${total} challenges passed. Keep going.`);
   process.exit(1);

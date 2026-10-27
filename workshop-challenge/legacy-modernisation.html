@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Level 4 — Legacy Code Modernisation (Challenge Summary)</title>
+<style>
+  :root {
+    --blue: #0f62fe; --blue-hover: #0043ce;
+    --ink: #161616; --gray-70: #525252; --gray-20: #e0e0e0; --gray-10: #f4f4f4;
+    --amber: #b28600; --amber-bg: #fff8e6;
+    --font: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    --mono: "IBM Plex Mono", "SF Mono", Menlo, Consolas, "Courier New", monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font); background: var(--gray-10); color: var(--ink); line-height: 1.55; }
+  header { background: var(--ink); color: #fff; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; border-bottom: 3px solid var(--blue); }
+  header h1 { margin: 0; font-size: 1.2rem; font-weight: 600; }
+  header .sub { margin: 0.15rem 0 0; color: var(--gray-20); font-size: 0.85rem; }
+  .btn-link { display: inline-block; background: var(--blue); color: #fff; text-decoration: none; border-radius: 3px; padding: 0.5rem 1.1rem; font-size: 0.9rem; font-weight: 600; }
+  .btn-link:hover { background: var(--blue-hover); }
+  a:focus, .btn-link:focus { outline: 2px solid var(--blue); outline-offset: 2px; }
+  main { max-width: 60rem; margin: 1.5rem auto 3rem; padding: 0 1rem; }
+  .card { background: #fff; border: 1px solid var(--gray-20); border-radius: 4px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
+  .card h2 { margin: 0 0 0.75rem; font-size: 1.1rem; color: var(--blue); }
+  .card h3 { margin: 1rem 0 0.25rem; font-size: 1rem; }
+  .card p { margin: 0.5rem 0; }
+  .card ul, .card ol { margin: 0.4rem 0; padding-left: 1.3rem; }
+  .card li { margin: 0.25rem 0; }
+  .lead { font-size: 1.05rem; }
+  .works { background: var(--gray-10); border-left: 4px solid var(--blue); padding: 0.6rem 1rem; margin: 0.75rem 0 0; font-size: 0.93rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 0.9rem; margin-top: 0.75rem; }
+  .crit { border: 1px solid var(--gray-20); border-top: 3px solid var(--blue); border-radius: 3px; padding: 0.75rem 1rem; }
+  .crit h3 { margin: 0 0 0.3rem; font-size: 0.98rem; }
+  .crit p { margin: 0; font-size: 0.92rem; color: var(--gray-70); }
+  .req { background: #edf5ff; border-left: 4px solid var(--blue); padding: 0.75rem 1rem; margin: 0.9rem 0 0.25rem; font-size: 0.95rem; }
+  .note { background: var(--amber-bg); border-left: 4px solid var(--amber); padding: 0.75rem 1rem; margin: 0.75rem 0; font-size: 0.92rem; }
+  code { font-family: var(--mono); font-size: 0.88em; background: var(--gray-10); padding: 0.05rem 0.3rem; border-radius: 2px; }
+  footer { text-align: center; color: var(--gray-70); font-size: 0.8rem; padding: 1.5rem 1rem 2.5rem; }
+  @media (max-width: 40rem) { header { flex-direction: column; align-items: flex-start; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Level 4 — Legacy Code Modernisation</h1>
+    <p class="sub">Challenge summary · transform an undocumented desktop application into a modern web service</p>
+  </div>
+  <a class="btn-link" href="../workshop-developer/index.html">← Back to Double Incident workshop</a>
+</header>
+
+<main>
+
+  <section class="card">
+    <h2>What you will do</h2>
+    <p class="lead">Modernise a VB.NET Parliamentary Question tracking system: a deliberately legacy
+    application with no documentation, poor coding practices, and business logic buried in form
+    event handlers.</p>
+    <p>Your task is to:</p>
+    <ol>
+      <li>Use AI tools to analyse and understand the undocumented codebase.</li>
+      <li>Extract and document the embedded business rules.</li>
+      <li>Rebuild it as a modern, accessible web application <strong>written in Python</strong>.</li>
+      <li>Preserve every piece of functionality from the original.</li>
+    </ol>
+    <div class="req"><strong>Workshop requirement: the modernised program must be written in Python.</strong>
+    The server-side code, business rules, and data handling must all be Python (for example with
+    Flask, FastAPI, or Django). The upstream challenge leaves the technology open; this workshop
+    fixes it. Do not rebuild in .NET, Node.js, or any other language.</div>
+  </section>
+
+  <section class="card">
+    <h2>Why this matters</h2>
+    <p>Government departments spend up to 60% of technology budgets maintaining legacy systems
+    rather than building new services. These ageing desktop applications:</p>
+    <ul>
+      <li>run on deprecated technologies that vendors no longer support;</li>
+      <li>contain undocumented business logic that walks out the door when staff leave;</li>
+      <li>cannot connect to modern platforms like GOV.UK One Login;</li>
+      <li>fail current accessibility standards and exclude remote workers;</li>
+      <li>create security risks through outdated dependencies;</li>
+      <li>block data sharing across departments.</li>
+    </ul>
+    <p>The Government Digital and Data Strategy identifies legacy technical debt as a primary barrier
+    to digital transformation. AI tools offer a way to rapidly analyse these systems, extract
+    institutional knowledge, and generate modern replacements.</p>
+  </section>
+
+  <section class="card">
+    <h2>The source application</h2>
+    <p>A VB.NET Windows Forms application that tracks Parliamentary Questions. It was built as a
+    training exercise with authentic technical debt:</p>
+    <ul>
+      <li>No README, comments, or documentation of any kind</li>
+      <li>Business logic embedded directly in form event handlers</li>
+      <li>Mixed naming conventions and hardcoded values throughout</li>
+      <li>Simple file-based storage with no backup capability</li>
+      <li>Runs only on Windows</li>
+    </ul>
+    <div class="note">The source repository is listed in the upstream summary as
+    “see App Mode application”. A copy of the VB.NET project sits next to this guide in
+    <code>app-mod-challenge/</code> (<code>Form1.vb</code>, <code>Form2.vb</code>,
+    <code>Program.vb</code>). Open that folder in IBM Bob to start.</div>
+  </section>
+
+  <section class="card">
+    <h2>What success looks like</h2>
+    <div class="grid">
+      <div class="crit"><h3>Preserve all functionality</h3>
+        <p>Every feature in the legacy application must work in your modern version. Nothing gets lost in translation.</p></div>
+      <div class="crit"><h3>Document the business logic</h3>
+        <p>Create clear documentation of government-specific rules: PQ deadline calculations, reference number formats, workflow requirements.</p></div>
+      <div class="crit"><h3>Build for modern standards</h3>
+        <p>Use a contemporary Python framework with proper separation of concerns. The application must work on mobile and desktop, and be compatible with screen readers.</p></div>
+      <div class="crit"><h3>Plan for data migration</h3>
+        <p>Show how existing data would move to your modern storage solution, using Python for any migration script.</p></div>
+      <div class="crit"><h3>Handle errors gracefully</h3>
+        <p>Include robust input validation and error messages that help users fix problems.</p></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Approaches you might take</h2>
+    <p>This challenge requires understanding before rebuilding. You cannot modernise what you do not understand.</p>
+
+    <h3>Prompt-driven development</h3>
+    <p>Use AI tools as archaeological instruments: systematically analysing the legacy codebase,
+    asking questions about what you find, and building understanding piece by piece before
+    generating modern equivalents.</p>
+    <div class="works"><strong>Works well when:</strong> the legacy system contains complex domain
+    knowledge and business continuity matters more than speed.</div>
+
+    <h3>Spec-driven development</h3>
+    <p>Create formal specifications for the modernisation, working through structured phases with
+    documented outputs at each stage.</p>
+    <div class="works"><strong>Works well when:</strong> stakeholders need to review and approve the
+    approach, or when you need audit trails for complex government systems.</div>
+
+    <h3>Combining approaches</h3>
+    <p>Start with prompt-driven analysis to understand what you are dealing with. Use spec-driven
+    methods for formal planning and sign-off. Return to prompt-driven development for implementation.</p>
+  </section>
+
+  <section class="card">
+    <p style="margin:0">This page summarises the challenge. For detailed guidance on how to approach the
+    work, see the implementation guides in the
+    <a href="https://github.com/Version1/ai-code-assistant-challenge-day/tree/main/level-04" rel="noopener">upstream repository</a>.</p>
+  </section>
+
+</main>
+
+<footer>
+  Content adapted from Version1/ai-code-assistant-challenge-day, level-04/challenge-summary.md ·
+  <a href="https://github.com/Version1/ai-code-assistant-challenge-day/blob/main/level-04/challenge-summary.md" rel="noopener">original</a> ·
+  The training application is fictional.
+</footer>
+
+</body>
+</html>

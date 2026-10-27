@@ -39,7 +39,7 @@ kkp-workshop/
 | **เหมาะสำหรับ** | Analyst, Risk, Compliance, HR | Developer, IT, Data Engineer |
 | **ไม่ต้องใช้** | เขียนโค้ด | — |
 | **เครื่องมือหลัก** | IBM Bob + CSV data | IBM Bob + Node.js |
-| **ผลลัพธ์** | HTML Dashboard, Word Report, PowerPoint | Restored Bob configuration + repaired settlement job, 8/8 challenges green, two winning words |
+| **ผลลัพธ์** | HTML Dashboard, Word Report, PowerPoint | Restored Bob configuration + repaired settlement job, 8/8 challenges green |
 | **เวลา** | 60 นาที | 60 นาที |
 | **เปิดคู่มือ** | [workshop-business/README.md](workshop-business/README.md) | [workshop-developer/index.html](workshop-developer/index.html) |
 
@@ -78,7 +78,7 @@ kkp-workshop/
 
 ### 💻 Developer — Double incident (code + Bob configuration)
 Workspace เดียวที่ deploy v2.3.0 ทำลายสองอย่างพร้อมกัน: settlement job จ่ายเงินผิด 3 อาการ (จ่ายซ้ำ, นอกวันทำการ, ต่าง 1 satang) และ .bob configuration ถูกวางยา 5 จุด (โหมด Ask ไม่มี tools, ไฟล์ถูกซ่อน, rules หลอก, hook แทรก context ปลอม)
-ผู้เรียนคืนค่า config แบบ byte-exact จาก backups ตาม official configuration docs ก่อน แล้วใช้ Bob ที่กลับมาเชื่อถือได้สืบหาและซ่อมโค้ดผ่าน acceptance tests 5 ข้อ เก็บตัวอักษร 8 ตัวประกอบเป็น winning words สองคำ
+ผู้เรียนคืนค่า config แบบ byte-exact จาก backups ตาม official configuration docs ก่อน แล้วใช้ Bob ที่กลับมาเชื่อถือได้สืบหาและซ่อมโค้ดผ่าน acceptance tests 5 ข้อ จนครบ 8/8 challenges
 เหตุการณ์เป็นเรื่องสมมติ อาการ config อ้างอิงจากพฤติกรรมที่ document ไว้ใน IBM Bob docs; starter ตั้งใจให้ tests และ verify ไม่ผ่าน
 
 ---
@@ -97,7 +97,7 @@ Workspace เดียวที่ deploy v2.3.0 ทำลายสองอย�
 - [ ] เข้าใจ .bob/rules/, rules-{mode}/, AGENTS.md, custom_modes.yaml, .bobignore และ settings.json hooks
 - [ ] ใช้ Bob Ask เปรียบเทียบสมมติฐานกับหลักฐาน และอนุมัติ diff ของ Bob Agent ก่อนทำจริง
 - [ ] คืนค่า configuration แบบ byte-exact และซ่อม settlement job ให้ถูกต้องครบทั้ง 8 challenge
-- [ ] พิสูจน์ผลด้วย acceptance tests และ verify script ที่รันจริง และ winning words สองคำจากตัวอักษรทั้ง 8 ตัว
+- [ ] พิสูจน์ผลด้วย acceptance tests และ verify script ที่รันจริง ครบ 8/8 challenges
 
 ---
 
